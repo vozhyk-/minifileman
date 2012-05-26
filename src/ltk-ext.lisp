@@ -29,7 +29,7 @@
 (export 'font-measure)
 
 (defun xview (widget)
-  (format-wish "senddata [~a xview\]" (widget-path widget))
+  (format-wish "senddata [~a xview]" (widget-path widget))
   (read-data))
 (export 'xview)
 
