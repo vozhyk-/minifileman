@@ -28,5 +28,10 @@
   (read-data))
 (export 'font-measure)
 
+(defun xview (widget)
+  (format-wish "senddata [~a xview\]" (widget-path widget))
+  (read-data))
+(export 'xview)
+
 (defmethod (setf cursor-index) (idx (e entry))
   (format-wish "senddata [~a icursor ~(~a~)]" (widget-path e) idx))

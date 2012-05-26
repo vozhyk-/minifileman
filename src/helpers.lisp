@@ -69,6 +69,13 @@
     (subseq string 0 (length beginning))
     beginning)))
 
+(defun positions (item sequence)
+  (loop
+     for pos = (position item sequence)
+       then (position item sequence :start (1+ pos))
+     while pos
+     collect pos))
+
 (defun nth-comp (n fun arg)
   (loop
      for result = arg then (funcall fun result)

@@ -14,6 +14,7 @@
 	   #:remove-keyword-args
 	   #:add-replace-keyword-args
            #:starts-with
+           #:positions
            #:nth-comp
 	   #:class-from
 	   #:class-precedence-list
