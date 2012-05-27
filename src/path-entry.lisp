@@ -42,11 +42,11 @@
                    (buttons buttons))
       pe
     (let* ((old-value (text entry))
-           (old-xview (xview entry))
-           (rebuild-buttons-cb
+           (old-xview (first (xview entry)))
+           (rebuild-buttons-cb ; "////"
             (callback (event)
               (let ((new-value (text entry))
-                    (new-xview (xview entry)))
+                    (new-xview (first (xview entry))))
                 (when (or (not (equal new-value old-value))
                           (not (equal new-xview old-xview)))
                   (dolist (b buttons) (destroy b))
@@ -57,7 +57,7 @@
                        for old = 0 then (1+ pos)
                        for pos in positions
                        for start = (- (font-measure font (subseq new-value 0 old))
-                                      (* new-xview (font-measure font new-value))) ; mustn't make additional buttons below 0px
+                                      (* new-xview (font-measure font new-value))) ; !!! mustn't make additional buttons below 0px
                        for width = (font-measure font (subseq new-value old (1+ pos)))
                        for count from 1
                        for button = (make-instance 'button
@@ -67,7 +67,7 @@
                                                               (callback ()
                                                                 (setf (text entry)
                                                                   (nth-comp (- (length positions) count)
-                                                                        #'dirname new-value))
+                                                                            #'dirname new-value))
                                                                 (focus entry)
                                                                 (setf (cursor-index entry) :end))))
                        collect button))
