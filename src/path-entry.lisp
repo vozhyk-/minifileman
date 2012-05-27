@@ -7,7 +7,6 @@
                   :grid '(0 0 :sticky "we")
                   :height 10)
    (entry 'entry
-          :font "Sans" ; Doesn't work, use (configure ...)
           :grid '(1 0 :sticky "we")))
   (:simple-slots
    (buttons :initform () :accessor buttons))
@@ -18,8 +17,6 @@
   (if test
       (apply fun args)
       (first (last args))))
-
-(defconstant +font+ "Sans")
 
 (defparameter *path-sep*
   (let* ((path *default-pathname-defaults*)
@@ -55,12 +52,13 @@
                   (dolist (b buttons) (destroy b))
                   (setf buttons
                     (loop
+                       with font = (cget entry :font)
                        with positions = (button-positions new-value)
                        for old = 0 then (1+ pos)
                        for pos in positions
-                       for start = (- (font-measure +font+ (subseq new-value 0 old))
-                                      (* new-xview (font-measure "Sans" new-value))) ; mustn't make additional buttons below 0px
-                       for width = (font-measure +font+ (subseq new-value old (1+ pos)))
+                       for start = (- (font-measure font (subseq new-value 0 old))
+                                      (* new-xview (font-measure font new-value))) ; mustn't make additional buttons below 0px
+                       for width = (font-measure font (subseq new-value old (1+ pos)))
                        for count from 1
                        for button = (make-instance 'button
                                                    :master buttons-fr
