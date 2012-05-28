@@ -29,7 +29,6 @@
               1 (length (first (last (pathname-directory dir-pathname))))
               1)))))
 
-;;; "~" -- ?
 (defun button-positions (path)
   (let ((poss (positions *path-sep* path)))
     (if (not (directory-pathname-p path))
