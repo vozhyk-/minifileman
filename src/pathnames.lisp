@@ -138,7 +138,7 @@
      (directory (clisp-subdirectories-wildcard wildcard)))
     
     #-(or sbcl cmu lispworks openmcl allegro clisp)
-    (error "list-directory not implemented")))
+    (error "list-directory-absolute not implemented")))
 
 (defun file-exists-p (pathname)
   #+(or sbcl lispworks openmcl)
@@ -176,6 +176,6 @@
            ((directory-pathname-p name)
 	    (when (and directories (funcall test name))
 	      (funcall fn name))
-	    (dolist (x (list-directory name)) (walk x)))
+	    (dolist (x (list-directory-absolute name)) (walk x)))
            ((funcall test name) (funcall fn name)))))
     (walk (pathname-as-directory dirname))))
