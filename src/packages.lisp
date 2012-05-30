@@ -1,7 +1,5 @@
 (in-package #:cl-user)
 
-(require '#:ltk)
-
 (defpackage #:org.programmingforchildren.minifileman.helpers
   (:nicknames #:minifileman.helpers)
   (:use #:common-lisp)
