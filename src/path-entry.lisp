@@ -13,11 +13,6 @@
   (:default-initargs
     :column-configure '((0 :weight 1))))
 
-(defun funcall-if (test fun &rest args)
-  (if test
-      (apply fun args)
-      (first (last args))))
-
 (defparameter *path-sep*
   (let* ((path *default-pathname-defaults*)
          (dir-pathname (pathname-as-directory path))
