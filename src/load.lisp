@@ -2,6 +2,8 @@
 
 (in-package #:cl-user)
 
+(load "minifileman.asd")
+
 (defun :load-pr ()
   (asdf:oos 'asdf:load-op '#:minifileman)
   (let ((*package* (find-package '#:cl-user)))
