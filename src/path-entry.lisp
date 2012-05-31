@@ -43,7 +43,7 @@
                     (new-xview (first (xview entry))))
                 (when (or (not (equal new-value old-value))
                           (not (equal new-xview old-xview)))
-                  (dolist (b buttons) (destroy b))
+                  (dolist (b buttons) (if b (destroy b)))
                   (setf buttons
                     (loop
                        with font = (cget entry :font)
@@ -51,19 +51,20 @@
                        for old = 0 then (1+ pos)
                        for pos in positions
                        for start = (- (font-measure font (subseq new-value 0 old))
-                                      (* new-xview (font-measure font new-value))) ; !!! mustn't make additional buttons below 0px
+                                      (* new-xview (font-measure font new-value)))
                        for width = (font-measure font (subseq new-value old (1+ pos)))
                        for count from 1
-                       for button = (make-instance 'button
-                                                   :master buttons-fr
-                                                   :place `(,start 0 :width ,width :height 10)
-                                                   :command (let ((count count))
-                                                              (callback ()
-                                                                (setf (text entry)
-                                                                  (nth-comp (- (length positions) count)
-                                                                            #'dirname new-value))
-                                                                (focus entry)
-                                                                (setf (cursor-index entry) :end))))
+                       for button = (if (>= (+ start width) 0)
+                                      (make-instance 'button
+                                                     :master buttons-fr
+                                                     :place `(,start 0 :width ,width :height 10)
+                                                     :command (let ((count count))
+                                                                (callback ()
+                                                                  (setf (text entry)
+                                                                    (nth-comp (- (length positions) count)
+                                                                              #'dirname new-value))
+                                                                  (focus entry)
+                                                                  (setf (cursor-index entry) :end)))))
                        collect button))
                   (setf old-value new-value))))))
       (bind entry "<Key>" rebuild-buttons-cb)))
