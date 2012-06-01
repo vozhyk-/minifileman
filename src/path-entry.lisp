@@ -24,8 +24,17 @@
               1 (length (first (last (pathname-directory dir-pathname))))
               1)))))
 
+(defun single-path-sep-only (positions)
+  (loop
+     with result = ()
+     for old = nil then p
+     for p in (reverse positions)
+     for show = t then (> (- old p) 1)
+     do (when show (push p result))
+    finally (return result)))
+
 (defun button-positions (path)
-  (let ((poss (positions *path-sep* path)))
+  (let ((poss (single-path-sep-only (positions *path-sep* path))))
     (if (not (directory-pathname-p path))
       (appendnew poss (list (1- (length path))))
       poss)))
