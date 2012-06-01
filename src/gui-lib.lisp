@@ -1,6 +1,6 @@
 ;;;; gui-lib.lisp -- GUI library for minifileman
 
-(in-package #:org.programmingforchildren.minifileman.gui-lib)
+(in-package #:minifileman.gui-lib)
 
 (defun has-content-p (args)
   (oddp (length args)))

@@ -1,7 +1,7 @@
 (in-package #:cl-user)
 
-(defpackage #:org.programmingforchildren.minifileman.helpers
-  (:nicknames #:minifileman.helpers)
+(defpackage #:minifileman.helpers
+  (:nicknames #:org.programmingforchildren.minifileman.helpers)
   (:use #:common-lisp)
   (:export #:ask-read-line
 	   #:with-condition-slots
@@ -19,15 +19,15 @@
 	   #:superclass-p
 	   #:append-new-superclasses))
 
-(defpackage #:org.programmingforchildren.minifileman.macro-helpers
-  (:nicknames #:minifileman.macro-helpers)
+(defpackage #:minifileman.macro-helpers
+  (:nicknames #:org.programmingforchildren.minifileman.macro-helpers)
   (:use #:common-lisp)
   (:export #:as-keyword
 	   #:with-gensyms
 	   #:destructure-define-args))
 
-(defpackage #:org.programmingforchildren.minifileman.pathnames
-  (:nicknames #:minifileman.pathnames)
+(defpackage #:minifileman.pathnames
+  (:nicknames #:org.programmingforchildren.minifileman.pathnames)
   (:use #:common-lisp)
   (:export #:list-directory-absolute
 	   #:file-exists-p
@@ -46,15 +46,15 @@
 	   #:directory-p
 	   #:file-p))
 
-(defpackage #:org.programmingforchildren.minifileman.filesystem
-  (:nicknames #:minifileman.filesystem)
+(defpackage #:minifileman.filesystem
+  (:nicknames #:org.programmingforchildren.minifileman.filesystem)
   (:use #:minifileman.pathnames
 	#:common-lisp)
   (:export #:list-directory))
 
-(defpackage #:org.programmingforchildren.minifileman.config
+(defpackage #:minifileman.config
   (:nicknames #:minifileman-config
-              #:minifileman.config)
+              #:org.programmingforchildren.minifileman.config)
   (:use #:minifileman.pathnames
 	#:minifileman.macro-helpers
 	#:common-lisp)
@@ -89,8 +89,8 @@
 	   ;#:*config-key-unsets*
 	   ))
 
-(defpackage #:org.programmingforchildren.minifileman.gui-lib
-  (:nicknames #:minifileman.gui-lib)
+(defpackage #:minifileman.gui-lib
+  (:nicknames #:org.programmingforchildren.minifileman.gui-lib)
   (:use #:minifileman.macro-helpers
 	#:ltk
 	#:common-lisp)
@@ -108,8 +108,9 @@
 	   #:self-autoresize
 	   #:callback))
 
-(defpackage #:org.programmingforchildren.minifileman.minifileman
-  (:nicknames #:minifileman #:minifileman.minifileman)
+(defpackage #:minifileman
+  (:nicknames #:org.programmingforchildren.minifileman
+              #:org.programmingforchildren.minifileman.minifileman)
   (:use #:minifileman.pathnames
 	#:minifileman.filesystem
 	#:minifileman.config

@@ -1,6 +1,6 @@
 ;;;; src/pathnames.lisp -- the pathname library for minifileman
 
-(in-package #:org.programmingforchildren.minifileman.pathnames)
+(in-package #:minifileman.pathnames)
 
 (defun component-present-p (value)
   (and value (not (eql value :unspecific))))

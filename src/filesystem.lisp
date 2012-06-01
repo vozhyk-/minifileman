@@ -1,4 +1,4 @@
-(in-package #:org.programmingforchildren.minifileman.filesystem)
+(in-package #:minifileman.filesystem)
 
 (defun list-directory (dirname)
   (mapcar #'basename

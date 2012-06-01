@@ -1,4 +1,4 @@
-(in-package #:org.programmingforchildren.minifileman.helpers)
+(in-package #:minifileman.helpers)
 
 ;(defun copy-hash (hash &key (test 'equal))
 ;  (let ((new-hash (make-hash-table :test test)))

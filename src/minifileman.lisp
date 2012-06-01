@@ -1,4 +1,4 @@
-(in-package #:org.programmingforchildren.minifileman.minifileman)
+(in-package #:minifileman)
 
 (defun pretty-directory (dir)
   (true-pathname-form (expand-pathname dir)))

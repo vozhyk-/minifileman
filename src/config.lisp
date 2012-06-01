@@ -1,4 +1,4 @@
-(in-package #:org.programmingforchildren.minifileman.config)
+(in-package #:minifileman.config)
 
 (defparameter *default-config-path*
   #+unix
