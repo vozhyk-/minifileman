@@ -46,7 +46,7 @@
       pe
     (let* ((old-value (text entry))
            (old-xview (first (xview entry)))
-           (rebuild-buttons-cb ; "////"
+           (rebuild-buttons-cb
             (callback (event)
               (let ((new-value (text entry))
                     (new-xview (first (xview entry))))
