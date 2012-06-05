@@ -44,7 +44,8 @@
 	   #:dirname
 	   #:walk-directory
 	   #:directory-p
-	   #:file-p))
+	   #:file-p
+           #:nonempty-pathname-p))
 
 (defpackage #:minifileman.filesystem
   (:nicknames #:org.programmingforchildren.minifileman.filesystem)

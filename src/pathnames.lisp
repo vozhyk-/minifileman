@@ -5,6 +5,18 @@
 (defun component-present-p (value)
   (and value (not (eql value :unspecific))))
 
+(defun nonempty-pathname-p (pathname)
+  (and
+   (find-if #'(lambda (x) (component-present-p (funcall x pathname)))
+            (list
+             #'pathname-host
+             #'pathname-device
+             #'pathname-directory
+             #'pathname-name
+             #'pathname-type
+             #'pathname-version))
+   pathname))
+
 (defun absolute-pathname-p (pathname)
   (eql (first (pathname-directory pathname))
        :absolute))
