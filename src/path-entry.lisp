@@ -13,16 +13,23 @@
   (:default-initargs
     :column-configure '((0 :weight 1))))
 
+(defun path-sep (&rest pathnames)
+  (let ((pn (find-if #'nonempty-pathname-p pathnames)))
+    (if pn
+      (let* ((dir-pathname (pathname-as-directory pn))
+             (dir-path (namestring dir-pathname)))
+        (if (equal (pathname-directory dir-pathname) '(:absolute))
+          (elt dir-path (1- (length dir-path))) ; unportable?
+          (elt dir-path
+               (- (length dir-path)
+                  1 (length (first (last (pathname-directory dir-pathname))))
+                  1))))
+      (error "No pathname from which path-separator can be extracted"))))
+
 (defparameter *path-sep*
-  (let* ((path *default-pathname-defaults*)
-         (dir-pathname (pathname-as-directory path))
-         (dir-path (namestring dir-pathname)))
-    (if (equal (pathname-directory dir-pathname) '(:absolute))
-      (elt dir-path (1- (length dir-path))) ; unportable?
-      (elt dir-path
-           (- (length dir-path)
-              1 (length (first (last (pathname-directory dir-pathname))))
-              1)))))
+  (path-sep *default-pathname-defaults*
+            ;; unportable?
+            (user-homedir-pathname)))
 
 (defun single-path-sep-only (positions)
   (loop
