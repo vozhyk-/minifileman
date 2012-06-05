@@ -67,7 +67,8 @@
 (defun go-to-dir (directory panel)
   (let ((directory (pretty-directory directory)))
     (setf (file-list panel) (minifileman-list-dir directory))
-    (setf (current-dir panel) directory)))
+    (setf (current-dir panel) directory)
+    (setf *default-pathname-defaults* directory)))
 
 (defun go-up (panel)
   (go-to-dir (dirname (current-dir panel)) panel))
@@ -101,7 +102,8 @@
 (defvar *panel* (list nil nil))
 
 (defun minifileman ()
-  (let ((*config* (make-instance 'config)))
+  (let ((*config* (make-instance 'config))
+        (*default-pathname-defaults* *default-pathname-defaults*))
     (with-ltk ()
       (wm-title *tk* "minifileman-dev20120330.13.25")
       (setf (first  *panel*) (make-instance 'panel :grid '(0 0 :sticky "wens")))
