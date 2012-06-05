@@ -117,7 +117,7 @@
 	#:minifileman.gui-lib
 	#:ltk
 	#:common-lisp)
-  (:export #:main
+  (:export #:minifileman
 	   #:minifileman-list-dir
 	   #:quit-minifileman))
 

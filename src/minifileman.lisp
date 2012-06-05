@@ -100,7 +100,7 @@
 
 (defvar *panel* (list nil nil))
 
-(defun main ()
+(defun minifileman ()
   (let ((*config* (make-instance 'config)))
     (with-ltk ()
       (wm-title *tk* "minifileman-dev20120330.13.25")
