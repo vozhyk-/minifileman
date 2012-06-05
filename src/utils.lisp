@@ -1,4 +1,4 @@
-(in-package #:minifileman.helpers)
+(in-package #:minifileman.utils)
 
 ;(defun copy-hash (hash &key (test 'equal))
 ;  (let ((new-hash (make-hash-table :test test)))

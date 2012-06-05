@@ -1,6 +1,6 @@
-;;;; macro-helpers.lisp -- Helpers for macros
+;;;; macro-utils.lisp
 
-(in-package #:minifileman.macro-helpers)
+(in-package #:minifileman.macro-utils)
 
 (defun as-keyword (symbol)
   (intern (symbol-name symbol) '#:keyword))

@@ -12,13 +12,13 @@
                #:kmrcl)
   :components
   ((:file "packages")
-   (:file "helpers" :depends-on ("packages"))
-   (:file "macro-helpers" :depends-on ("packages"))
-   (:file "pathnames" :depends-on ("helpers"))
+   (:file "utils" :depends-on ("packages"))
+   (:file "macro-utils" :depends-on ("packages"))
+   (:file "pathnames" :depends-on ("utils"))
    (:file "filesystem" :depends-on ("pathnames"))
-   (:file "config" :depends-on ("pathnames" "macro-helpers"))
+   (:file "config" :depends-on ("pathnames" "macro-utils"))
    (:file "ltk-ext")
-   (:file "gui-lib" :depends-on ("ltk-ext" "helpers" "macro-helpers"))
+   (:file "gui-lib" :depends-on ("ltk-ext" "utils" "macro-utils"))
    (:file "minifileman"
           :depends-on ("filesystem"
                        "config"

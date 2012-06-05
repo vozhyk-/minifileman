@@ -1,7 +1,7 @@
 (in-package #:cl-user)
 
-(defpackage #:minifileman.helpers
-  (:nicknames #:org.programmingforchildren.minifileman.helpers)
+(defpackage #:minifileman.utils
+  (:nicknames #:org.programmingforchildren.minifileman.utils)
   (:use #:common-lisp)
   (:export #:ask-read-line
 	   #:with-condition-slots
@@ -19,8 +19,8 @@
 	   #:superclass-p
 	   #:append-new-superclasses))
 
-(defpackage #:minifileman.macro-helpers
-  (:nicknames #:org.programmingforchildren.minifileman.macro-helpers)
+(defpackage #:minifileman.macro-utils
+  (:nicknames #:org.programmingforchildren.minifileman.macro-utils)
   (:use #:common-lisp)
   (:export #:as-keyword
 	   #:with-gensyms
@@ -56,9 +56,9 @@
   (:nicknames #:minifileman-config
               #:org.programmingforchildren.minifileman.config)
   (:use #:minifileman.pathnames
-	#:minifileman.macro-helpers
+	#:minifileman.macro-utils
 	#:common-lisp)
-  (:import-from #:minifileman.helpers
+  (:import-from #:minifileman.utils
     #:as-list
     #:ask-read-line
     #:dohash
@@ -91,10 +91,10 @@
 
 (defpackage #:minifileman.gui-lib
   (:nicknames #:org.programmingforchildren.minifileman.gui-lib)
-  (:use #:minifileman.macro-helpers
+  (:use #:minifileman.macro-utils
 	#:ltk
 	#:common-lisp)
-  (:import-from #:minifileman.helpers
+  (:import-from #:minifileman.utils
     #:remove-keyword-args
     #:add-replace-keyword-args
     #:superclass-p
@@ -123,7 +123,7 @@
 
 (defpackage #:minifileman-user
   (:use #:minifileman
-        #:minifileman.helpers
+        #:minifileman.utils
         #:kmrcl
         #:minifileman.pathnames
 	#:minifileman.filesystem
