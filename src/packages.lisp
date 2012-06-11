@@ -3,6 +3,8 @@
 (defpackage #:minifileman.utils
   (:nicknames #:org.programmingforchildren.minifileman.utils)
   (:use #:common-lisp)
+  (:import-from #:kmrcl
+    #:with-gensyms)
   (:export #:ask-read-line
 	   #:with-condition-slots
 	   ;#:alist->hash
@@ -22,7 +24,6 @@
   (:nicknames #:org.programmingforchildren.minifileman.macro-utils)
   (:use #:common-lisp)
   (:export #:as-keyword
-	   #:with-gensyms
 	   #:destructure-define-args))
 
 (defpackage #:minifileman.pathnames
@@ -98,6 +99,7 @@
     #:append-new-superclasses)
   (:import-from #:kmrcl
     #:get-alist
+    #:with-gensyms
     #:awhen
     #:it)
   (:export #:gui-class
