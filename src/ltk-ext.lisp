@@ -6,6 +6,7 @@
 					grid row-configure column-configure
 					pack
 					place
+                                        bind
 					&allow-other-keys)
   (call-next-method)
   ;; pack widget if parameter has been supplied ; `
@@ -15,6 +16,8 @@
     (apply #'place w place))                    ; |
   (when grid                                    ; |
     (apply #'grid w grid))                      ; '
+  (dolist (b bind)
+    (apply #'bind w b))
   (dolist (i row-configure)
     (apply #'grid-rowconfigure w i))
   (dolist (i column-configure)

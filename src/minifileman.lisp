@@ -19,7 +19,7 @@
 		:grid :supplied
 		:column-configure '((0 :weight 1))
 		:row-configure '((1 :weight 1))
-		:bind (("Control-Q" #'quit-minifileman))
+		:bind '(("<Control-q>" quit-minifileman))
      ((path-entry 'entry
 		  :grid '(0 0 :sticky "we"))
       (up-button 'button

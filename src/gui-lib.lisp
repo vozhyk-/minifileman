@@ -16,7 +16,7 @@
       args))
 
 (defun strip-args (args)
-  (remove-keyword-args (remove-content args) :master :grid :bind))
+  (remove-keyword-args (remove-content args) :master :grid))
 
 (defmacro slot-bind ((&key
 		      ((:slot stripped-slot) (gensym) slot-supplied-p)
@@ -79,14 +79,6 @@
 		     grid)))
       `(make-instance ,type ,@(append (strip-args args) `(:master ,master) `(:grid ,grid))))))
 
-(defun spec->binds (spec)
-  (spec->list (:name name :args args :nconc t) spec
-    (let ((bindings (getf args :bind)))
-      (mapcar #'(lambda (binding)
-		  (destructuring-bind (event fun) binding
-		    `(bind ,name ,event ,fun)))
-	      bindings))))
-
 (defclass gui-class ()
   ()
   (:documentation "Superclass of all GUI classes"))
@@ -125,8 +117,7 @@
                               :initial-master (if sub-of-wg
                                                   object-var
                                                   master-var))
-                   spec `(setf ,name ,(slot->make-instance slot master grid-var)))
-               ,@(spec->binds spec))))
+                   spec `(setf ,name ,(slot->make-instance slot master grid-var))))))
        ',name)))
 
 (defun self-autoresize (master &optional grid)
