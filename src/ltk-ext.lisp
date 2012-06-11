@@ -31,13 +31,6 @@
   (read-data))
 (export 'font-measure)
 
-(defun xview (widget)
-  (labels ((xview ()
-             (format-wish "senddatastrings [~a xview]" (widget-path widget))
-             (mapcar #'kmrcl:parse-float (read-data))))
-    (do ((xv (xview) (xview)))
-        ((/= (first xv) (second xv)) xv))))
-(export 'xview)
 
 (defmethod (setf cursor-index) (idx (e entry))
   (format-wish "senddata [~a icursor ~(~a~)]" (widget-path e) idx))
