@@ -8,6 +8,7 @@
   :author "Vitaut Bajaryn <vitaut.bayaryn@gmail.com>"
   :license "BSD-2-Clause"
   :depends-on (#:ltk
+               #:cl-fad
                #:closer-mop
                #:kmrcl)
   :components

@@ -28,35 +28,32 @@
 
 (defpackage #:minifileman.pathnames
   (:nicknames #:org.programmingforchildren.minifileman.pathnames)
-  (:use #:common-lisp)
-  (:export #:list-directory-absolute
-	   #:file-exists-p
-	   #:append-pathnames
+  (:use #:cl-fad
+        #:common-lisp)
+  (:export #:nonempty-pathname-p
+           #:append-pathnames
 	   #:expand-pathname
 	   #:directory-pathname-p
-	   #:file-pathname-p
 	   #:absolute-pathname-p
-	   #:pathname-as-directory
-	   #:pathname-as-file
 	   #:true-pathname-form
 	   #:preserve-pathname-directory-form
 	   #:basename
 	   #:dirname
-	   #:walk-directory
 	   #:directory-p
-	   #:file-p
-           #:nonempty-pathname-p))
+	   #:file-p))
 
 (defpackage #:minifileman.filesystem
   (:nicknames #:org.programmingforchildren.minifileman.filesystem)
   (:use #:minifileman.pathnames
+        #:cl-fad
 	#:common-lisp)
-  (:export #:list-directory))
+  (:export #:list-directory-relative))
 
 (defpackage #:minifileman.config
   (:nicknames #:minifileman-config
               #:org.programmingforchildren.minifileman.config)
   (:use #:minifileman.pathnames
+        #:cl-fad
 	#:minifileman.macro-utils
 	#:common-lisp)
   (:import-from #:minifileman.utils
@@ -116,6 +113,7 @@
 	#:minifileman.filesystem
 	#:minifileman.config
 	#:minifileman.gui-lib
+        #:cl-fad
 	#:ltk
 	#:common-lisp)
   (:export #:minifileman
@@ -126,10 +124,14 @@
   (:use #:minifileman
         #:minifileman.utils
         #:kmrcl
+        #:cl-fad
         #:minifileman.pathnames
 	#:minifileman.filesystem
 	#:minifileman.config
 	#:minifileman.gui-lib
 	#:ltk
         #:common-lisp
-	#:common-lisp-user))
+	#:common-lisp-user)
+  (:shadowing-import-from #:kmrcl
+    #:copy-file
+    #:delete-directory-and-files))

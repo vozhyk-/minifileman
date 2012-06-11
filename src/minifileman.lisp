@@ -6,7 +6,7 @@
 (defun minifileman-list-dir (dir)
   (let ((dir (pretty-directory dir)))
     (if (directory-p dir)
-      (list-directory dir)
+      (list-directory-relative dir)
       (error "Not a directory: ~a" dir))))
 
 (defun quit-minifileman (&optional event)

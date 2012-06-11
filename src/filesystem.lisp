@@ -1,5 +1,5 @@
 (in-package #:minifileman.filesystem)
 
-(defun list-directory (dirname)
+(defun list-directory-relative (dirname)
   (mapcar #'basename
-     (list-directory-absolute dirname)))
+          (list-directory dirname)))
