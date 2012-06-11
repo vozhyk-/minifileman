@@ -241,7 +241,7 @@ to the config"
      for (if what) in (second (assoc use *config-dependencies* :test #'string=))
      if (eval `(let ((value ,(config use :config config)))
 		 ,if))
-       append (as-list what)))
+       append (mklist what)))
 
 (defun check-use (use &optional (config *config*))
   (let ((set-p (set-p use config)))

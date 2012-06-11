@@ -7,7 +7,6 @@
 	   #:with-condition-slots
 	   ;#:alist->hash
 	   #:dohash
-	   #:as-list
 	   ;#:skip-keyword-args
 	   #:remove-keyword-args
 	   #:add-replace-keyword-args
@@ -57,12 +56,12 @@
 	#:minifileman.macro-utils
 	#:common-lisp)
   (:import-from #:minifileman.utils
-    #:as-list
     #:ask-read-line
     #:dohash
     #:with-condition-slots)
   (:import-from #:kmrcl
-    #:get-alist)
+    #:get-alist
+    #:mklist)
   (:export #:define-config
            #:*default-config-path*
 	   #:*config-defaults*

@@ -37,11 +37,6 @@
   `(loop for ,key being the hash-keys in ,hash using (hash-value ,value)
       do ,@body))
 
-(defun as-list (atom-or-list)
-  (if (listp atom-or-list)
-      atom-or-list
-      (list atom-or-list)))
-
 #|
 (defun skip-keyword-args (args)
   (loop
