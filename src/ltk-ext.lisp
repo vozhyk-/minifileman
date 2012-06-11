@@ -33,4 +33,4 @@
 
 
 (defmethod (setf cursor-index) (idx (e entry))
-  (format-wish "senddata [~a icursor ~(~a~)]" (widget-path e) idx))
+  (format-wish "~a icursor ~(~a~)" (widget-path e) idx))
