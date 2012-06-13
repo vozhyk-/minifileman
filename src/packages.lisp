@@ -23,6 +23,8 @@
 (defpackage #:minifileman.macro-utils
   (:nicknames #:org.programmingforchildren.minifileman.macro-utils)
   (:use #:common-lisp)
+  (:import-from #:kmrcl
+    #:get-alist)
   (:export #:as-keyword
 	   #:destructure-define-args))
 
