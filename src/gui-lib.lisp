@@ -16,7 +16,7 @@
       args))
 
 (defun strip-args (args)
-  (remove-keyword-args (remove-content args) :master :grid))
+  (remove-content args))
 
 (defmacro slot-bind ((&key
 		      ((:slot stripped-slot) (gensym) slot-supplied-p)
@@ -29,15 +29,14 @@
 		     &body body)
   `(destructuring-bind (,name ,type &rest ,whole-args) ,slot
      (declare (ignorable ,name ,type ,whole-args))
-     (let* ,(nconc
-	     (when slot-supplied-p `((,stripped-slot (remove-content ,slot))))
-	     (when args-supplied-p
-	       `((,args
-		  ,(if slot-supplied-p
-		       `(cddr ,stripped-slot)
-		       `(cddr (remove-content ,slot))))))
-	     (when content-supplied-p
-	       `((,content (content ,whole-args)))))
+     (let* (,@(when slot-supplied-p `((,stripped-slot (remove-content ,slot))))
+            ,@(when args-supplied-p
+                `((,args
+                   ,(if slot-supplied-p
+                        `(cddr ,stripped-slot)
+                        `(cddr (remove-content ,slot))))))
+            ,@(when content-supplied-p
+                `((,content (content ,whole-args)))))
        ,@body)))
 
 (defmacro spec->list ((&rest slot-bind-args
@@ -50,7 +49,7 @@
 		       (nconc nil)
 		       &allow-other-keys)
 		      spec
-		      expression)
+		      result)
   (let ((slot-bind-args (add-replace-keyword-args
 			 (remove-keyword-args slot-bind-args :whole-slot :master :initial-master :nconc)
 			 :name name
@@ -61,7 +60,7 @@
 		  (mapcan #'(lambda (,slot-var)
 			      (slot-bind ,slot-bind-args ,slot-var
 				(funcall ,(if nconc '#'nconc '#'cons)
-					 ,expression
+					 ,result
 					 (,fun-name ,content ,name))))
 			  ,spec-var)))
 	 (,fun-name ,spec ,initial-master)))))
@@ -72,12 +71,12 @@
 
 (defun slot->make-instance (slot master supplied-grid)
   (slot-bind (:type type :args args) slot
-    (let* ((master (getf args :master master))
-	   (grid (getf args :grid))
-	   (grid (if (eql grid :supplied)
-		     supplied-grid
-		     grid)))
-      `(make-instance ,type ,@(append (strip-args args) `(:master ,master) `(:grid ,grid))))))
+    (let ((grid (acase (getf args :grid)
+                  (:supplied supplied-grid)
+                  (t it))))
+      `(make-instance ,type
+                      :grid ,grid ,@(strip-args args)
+                      :master ,master))))
 
 (defclass gui-class ()
   ()
@@ -95,35 +94,36 @@
 
 (defmacro define-gui-class (name superclasses spec &rest args)
   (with-gensyms (object-var master-var grid-var)
-    `(progn
-       (defclass ,name ,(append-new-superclasses superclasses 'gui-class)
-         ,(append
-           (spec->defclass-slots spec)
-           (get-alist :simple-slots args))
-         ,@(awhen (get-alist :default-initargs args)
-             `((:default-initargs ,@(apply #'add-replace-keyword-args '(:master *tk*) it))))
-         ,@(get-alist :defclass-options args)
-         ,@(assoc :documentation args))
-       ,(let ((sub-of-wg (find-if (superclass-p 'widget) superclasses))) ; is a subclass of widget 
-          `(defmethod initialize-gui-class-instance ((,object-var ,name)
-                                                     &key
-                                                     ((:master ,master-var))
-                                                     ((:grid ,grid-var))
-                                                     &allow-other-keys)
-             (declare (ignorable ,master-var ,grid-var))
-             (with-accessors ,(spec->list (:name name) spec `(,name ,name))
-                 ,object-var
-               ,@(spec->list (:name name :slot slot :master master
-                              :initial-master (if sub-of-wg
-                                                  object-var
-                                                  master-var))
-                   spec `(setf ,name ,(slot->make-instance slot master grid-var))))))
-       ',name)))
+    (destructure-define-args (simple-slots default-initargs defclass-options documentation) args
+      `(progn
+         (defclass ,name ,(append-new-superclasses superclasses 'gui-class)
+           (,@(spec->defclass-slots spec)
+            ,@simple-slots)
+           ,@(when default-initargs
+             `((:default-initargs ,@(apply #'add-replace-keyword-args '(:master *tk*) default-initargs))))
+           ,@defclass-options
+           ,@(when documentation
+              `((:documentation ,@documentation))))
+         ,(let ((sub-of-wg (find-if (superclass-p 'widget) superclasses))) ; is a subclass of widget
+            `(defmethod initialize-gui-class-instance ((,object-var ,name)
+                                                       &key
+                                                       ((:master ,master-var))
+                                                       ((:grid ,grid-var))
+                                                       &allow-other-keys)
+               (declare (ignorable ,master-var ,grid-var))
+               (with-accessors ,(spec->list (:name name) spec `(,name ,name))
+                   ,object-var
+                 ,@(spec->list (:name name :slot slot :master master
+                                :initial-master (if sub-of-wg
+                                                    object-var
+                                                    master-var))
+                     spec `(setf ,name ,(slot->make-instance slot master grid-var))))))
+         ',name))))
 
-(defun self-autoresize (master &optional grid)
+(defun self-autoresize (master grid)
   (let ((sticky (getf (cddr grid) :sticky)))
     (when (null grid)
-      (warn "grid parameter is nil or unsupplied. ~
+      (warn "grid parameter is nil. ~
              Don't know how to configure master"))
     (when (and (find #\n sticky) (find #\s sticky))
       (grid-rowconfigure master (first grid) :weight 1))
