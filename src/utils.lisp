@@ -97,3 +97,8 @@
     (when (not (find-if (superclass-p new-sup)
 			orig))
       (pushnew new-sup orig))))
+
+(defmacro acase (keyform &body clauses)
+  `(let ((it ,keyform))
+     (case it
+       ,@clauses)))

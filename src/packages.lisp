@@ -4,7 +4,8 @@
   (:nicknames #:org.programmingforchildren.minifileman.utils)
   (:use #:common-lisp)
   (:import-from #:kmrcl
-    #:with-gensyms)
+    #:with-gensyms
+    #:it)
   (:export #:ask-read-line
 	   #:with-condition-slots
 	   ;#:alist->hash
@@ -12,6 +13,8 @@
 	   ;#:skip-keyword-args
 	   #:remove-keyword-args
 	   #:add-replace-keyword-args
+           #:acase
+           #:it
            #:starts-with
            #:positions
            #:nth-comp
@@ -97,6 +100,7 @@
   (:import-from #:minifileman.utils
     #:remove-keyword-args
     #:add-replace-keyword-args
+    #:acase
     #:superclass-p
     #:append-new-superclasses)
   (:import-from #:kmrcl
