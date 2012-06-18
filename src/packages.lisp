@@ -107,7 +107,8 @@
     #:get-alist
     #:with-gensyms
     #:awhen
-    #:it)
+    #:it
+    #:let-when)
   (:export #:gui-class
 	   #:define-gui-class
 	   #:self-autoresize
