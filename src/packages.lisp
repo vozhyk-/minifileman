@@ -6,7 +6,8 @@
   (:import-from #:kmrcl
     #:with-gensyms
     #:it)
-  (:export #:ask-read-line
+  (:export #:last1
+           #:ask-read-line
 	   #:with-condition-slots
 	   ;#:alist->hash
 	   #:dohash
@@ -101,6 +102,7 @@
     #:remove-keyword-args
     #:add-replace-keyword-args
     #:acase
+    #:last1
     #:superclass-p
     #:append-new-superclasses)
   (:import-from #:kmrcl

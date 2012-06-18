@@ -7,7 +7,7 @@
 
 (defun content (args)
   (if (has-content-p args)
-      (first (last args))
+      (last1 args)
       nil))
 
 (defun remove-content (args)

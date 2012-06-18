@@ -22,7 +22,7 @@
           (elt dir-path (1- (length dir-path))) ; unportable?
           (elt dir-path
                (- (length dir-path)
-                  1 (length (first (last (pathname-directory dir-pathname))))
+                  1 (length (last1 (pathname-directory dir-pathname)))
                   1))))
       (error "No pathname from which path-separator can be extracted"))))
 

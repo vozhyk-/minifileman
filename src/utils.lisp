@@ -1,5 +1,8 @@
 (in-package #:minifileman.utils)
 
+(defun last1 (list)
+  (first (last list)))
+
 ;(defun copy-hash (hash &key (test 'equal))
 ;  (let ((new-hash (make-hash-table :test test)))
 ;    (dohash (key value hash)
