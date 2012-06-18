@@ -37,4 +37,4 @@ directory form - see PATHNAME-AS-DIRECTORY."
 
 (defun list-directory-relative (dirname)
   (mapcar #'basename
-          (list-directory dirname)))
+          (list-directory dirname :resolve-symlinks nil)))
