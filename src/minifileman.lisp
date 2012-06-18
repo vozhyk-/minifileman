@@ -19,7 +19,6 @@
 		:grid :supplied
 		:column-configure '((0 :weight 1))
 		:row-configure '((1 :weight 1))
-		:bind '(("<Control-q>" quit-minifileman))
      ((path-entry 'entry
 		  :grid '(0 0 :sticky "we"))
       (up-button 'button
@@ -106,5 +105,6 @@
         (*default-pathname-defaults* *default-pathname-defaults*))
     (with-ltk ()
       (wm-title *tk* "minifileman-dev20120330.13.25")
+      (bind *tk* "<Control-q>" #'quit-minifileman)
       (setf (first  *panel*) (make-instance 'panel :grid '(0 0 :sticky "wens")))
       (setf (second *panel*) (make-instance 'panel :grid '(0 1 :sticky "wens"))))))
