@@ -14,11 +14,12 @@
     :column-configure '((0 :weight 1))))
 
 (defun path-sep (&rest pathnames)
-  (let ((pn (find-if #'nonempty-pathname-p pathnames)))
-    (if pn
-      (let* ((dir-pathname (pathname-as-directory pn))
-             (dir-path (namestring dir-pathname)))
-        (if (equal (pathname-directory dir-pathname) '(:absolute))
+  (let ((pn (aif (find-if #'identity pathnames)
+              (truename it)
+              (error "No pathname from which path-separator can be extracted"))))
+    (let* ((dir-pathname (pathname-as-directory pn))
+           (dir-path (namestring dir-pathname)))
+      (if (equal (pathname-directory dir-pathname) '(:absolute))
           (elt dir-path (1- (length dir-path))) ; unportable?
           (elt dir-path
                (- (length dir-path)
