@@ -79,11 +79,13 @@
        (user-homedir-pathname))
       (t pathname))))
 
-(defun true-pathname-form (name)
-  (file-exists-p (pathname name)))
-
 (defun directory-p (pathspec)
   (directory-exists-p pathspec))
 
 (defun file-p (pathspec)
   (not (directory-p pathspec)))
+
+(defun true-pathname-form (name)
+  (if (directory-p name)
+      (pathname-as-directory name)
+      (pathname-as-file name)))
