@@ -24,8 +24,7 @@
           (elt dir-path
                (- (length dir-path)
                   1 (length (last1 (pathname-directory dir-pathname)))
-                  1))))
-      (error "No pathname from which path-separator can be extracted"))))
+                  1))))))
 
 (defparameter *path-sep*
   (path-sep *default-pathname-defaults*
