@@ -2,6 +2,13 @@
 
 (in-package #:minifileman.pathnames)
 
+(defun topathname (name)
+  #+(and (or sbcl cmu) unix)
+  (pathname (if (stringp name)
+                (escape-backslashes name)
+                name))
+  #-(and (or sbcl cmu) unix) (pathname name))
+
 (defun nonempty-pathname-p (pathname)
   (and
    (find-if #'(lambda (x) (cl-fad::component-present-p (funcall x pathname)))
@@ -18,6 +25,22 @@
   (eql (first (pathname-directory pathname))
        :absolute))
 
+#+(and (or sbcl cmu) unix)
+;;; Redefine cl-fad:pathname-as-file (use topathname)
+(defun pathname-as-file (pathspec)
+  "Converts the non-wild pathname designator PATHSPEC to file form."
+  (let ((pathname (topathname pathspec))) ; changed
+    (when (wild-pathname-p pathname)
+      (error "Can't reliably convert wild pathnames."))
+    (cond ((directory-pathname-p pathspec)
+           (let* ((directory (pathname-directory pathname))
+                  (name-and-type (topathname (first (last directory))))) ; changed
+             (make-pathname :directory (butlast directory)
+                            :name (pathname-name name-and-type)
+                            :type (pathname-type name-and-type)
+                            :defaults pathname)))
+          (t pathname))))
+
 (defun preserve-pathname-directory-form (pathname original)
   (if (directory-pathname-p original)
       (pathname-as-directory pathname)
@@ -29,8 +52,8 @@
       ((= (length names) 0) (make-pathname))
       ((= (length names) 1) (first names))
       (t
-       (let* ((first (pathname-as-directory (pathname (first names))))
-	      (second (pathname (second names)))
+       (let* ((first (pathname-as-directory (topathname (first names))))
+	      (second (topathname (second names)))
 	      (first-directory (pathname-directory first))
 	      (second-directory (pathname-directory second)))
 	 (when (or (wild-pathname-p first)
@@ -49,8 +72,8 @@
 		(cddr names)))))))
 
 (defun basename (name)
-  (let ((pathname (pathname name)))
-    (if (not (equal pathname #P"/"))
+  (let ((pathname (topathname name)))
+    (if (not (equal pathname #P"/")) ; unportable?
       (preserve-pathname-directory-form (make-pathname
 					 :directory nil
 					 :defaults (pathname-as-file pathname))
@@ -58,7 +81,7 @@
       pathname)))
 
 (defun dirname (name)
-  (let ((pathname (pathname name)))
+  (let ((pathname (topathname name)))
     (pathname-as-directory
      (make-pathname
       :name nil
@@ -66,7 +89,7 @@
       :defaults (pathname-as-file pathname)))))
 
 (defun expand-pathname (name)
-  (let* ((pathname (pathname name))
+  (let* ((pathname (topathname name))
 	 (directory (pathname-directory pathname)))
     (cond
       ((string= (second directory) "~")

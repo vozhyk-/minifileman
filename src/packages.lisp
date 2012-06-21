@@ -36,7 +36,10 @@
   (:nicknames #:org.programmingforchildren.minifileman.pathnames)
   (:use #:cl-fad
         #:common-lisp)
-  (:export #:nonempty-pathname-p
+  (:import-from #:kmrcl
+    #:escape-backslashes)
+  (:export #:topathname
+           #:nonempty-pathname-p
            #:append-pathnames
 	   #:expand-pathname
 	   #:directory-pathname-p
