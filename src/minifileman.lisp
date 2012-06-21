@@ -53,10 +53,17 @@
     (setf (text path-entry) new-dir)
     (setf (cursor-index path-entry) :end)))
 
+(defun file-list-for-display (list)
+  #+(and openmcl unix)
+  (mapcar #'(lambda (x)
+              (remove ccl::*pathname-escape-character* (namestring x))) ; everywhere?
+          list)
+  #-(and openmcl unix) list)
+
 (defmethod (setf file-list) :after (new-list (panel panel))
   (let ((listbox (files-listbox panel)))
     (listbox-clear listbox)
-    (listbox-append listbox new-list)))
+    (listbox-append listbox (file-list-for-display new-list))))
 
 (defun files-listbox-selection (panel)
   (mapcar #'(lambda (index)

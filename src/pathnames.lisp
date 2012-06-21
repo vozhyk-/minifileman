@@ -2,6 +2,10 @@
 
 (in-package #:minifileman.pathnames)
 
+;; For supporting '\' in pathnames
+#+(and openmcl unix) ; digitool?
+(setf ccl::*pathname-escape-character* #\null)
+
 (defun topathname (name)
   #+(and (or sbcl cmu) unix)
   (pathname (if (stringp name)
