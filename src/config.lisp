@@ -3,9 +3,9 @@
 (defparameter *default-config-path*
   #+unix
    (expand-pathname #P"~/.minifileman/minifileman.conf")
-  #+windows
+  #+win32 ; 64?
    #P"C:\\minifileman-conf.txt"
-  #-(or unix windows)
+  #-(or unix win32)
    (error "Not implemented"))
 
 ;(defparameter *default-config-hash* (make-hash-table :test 'equal))
