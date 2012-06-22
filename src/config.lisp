@@ -148,11 +148,10 @@
  or
   \"<comment>\"
 to the config"
-  (let ((space-pos (position #\Space line)))
-    (if space-pos
-      (setf (config (subseq line 0 space-pos) :config config)
-	    (subseq line (1+ space-pos)))
-      (add-comment line config))))
+  (let-if (space-pos (position #\Space line))
+    (setf (config (subseq line 0 space-pos) :config config)
+          (subseq line (1+ space-pos)))
+    (add-comment line config)))
 
 ;(defgeneric add-comment (comment &optional config)
 ;  (:documentation "Add a comment to the config"))

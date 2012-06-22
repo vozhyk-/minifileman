@@ -71,6 +71,7 @@
     #:with-condition-slots)
   (:import-from #:kmrcl
     #:get-alist
+    #:let-if
     #:mklist)
   (:export #:define-config
            #:*default-config-path*
