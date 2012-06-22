@@ -29,6 +29,14 @@
   (eql (first (pathname-directory pathname))
        :absolute))
 
+(defun root-p (pathspec)
+  (bind ((pn (topathname pathspec))
+         ((:structure pathname- directory name type) pn))
+    (and
+     (not (fad::component-present-p name))
+     (not (fad::component-present-p type))
+     (eql directory '(:absolute)))))
+
 #+(and (or sbcl cmu) unix)
 ;;; Redefine cl-fad:pathname-as-file (use topathname)
 (defun pathname-as-file (pathspec)
@@ -77,7 +85,7 @@
 
 (defun basename (name)
   (let ((pathname (topathname name)))
-    (if (not (equal pathname #P"/")) ; unportable?
+    (if (not (root-p pathname))
       (preserve-pathname-directory-form (make-pathname
 					 :directory nil
 					 :defaults (pathname-as-file pathname))

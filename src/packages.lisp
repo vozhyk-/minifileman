@@ -44,6 +44,7 @@
 	   #:expand-pathname
 	   #:directory-pathname-p
 	   #:absolute-pathname-p
+           #:root-p
 	   #:true-pathname-form
 	   #:preserve-pathname-directory-form
 	   #:basename
