@@ -36,7 +36,8 @@
   (:use #:cl-fad
         #:common-lisp)
   (:import-from #:kmrcl
-    #:escape-backslashes)
+    #:escape-backslashes
+    #:mklist)
   (:export #:topathname
            #:nonempty-pathname-p
            #:append-pathnames

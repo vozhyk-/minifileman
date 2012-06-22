@@ -92,19 +92,20 @@
       :type nil
       :defaults (pathname-as-file pathname)))))
 
-(defun expand-pathname (name)
-  (let* ((pathname (topathname name))
-	 (directory (pathname-directory pathname)))
-    (cond
-      ((string= (second directory) "~")
-       (append-pathnames
-	(user-homedir-pathname)
-	(make-pathname
-	 :defaults pathname
-	 :directory (apply #'list :relative (cddr directory)))))
-      ((and (null directory) (string= (file-namestring pathname) "~"))
-       (user-homedir-pathname))
-      (t pathname))))
+(defun expand-pathname (pathspec)
+  (bind (((:labels homep (dir-el))
+            (eql (first (mklist dir-el)) :home))
+         (pathname (topathname pathspec))
+         (directory (pathname-directory pathname)))
+    (if (homep (second directory))
+      (append-pathnames
+       (truename (make-pathname
+                  :directory (subseq directory 0 2)
+                  :defaults (pathname-as-directory pathname)))
+       (make-pathname
+        :directory (cons :relative (cddr directory))
+        :defaults pathname))
+      pathname)))
 
 (defun directory-p (pathspec)
   (directory-exists-p pathspec))
