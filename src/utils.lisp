@@ -19,13 +19,11 @@
      ,@body))
 |#
 
+;;; obsolete, use bind !
 (defmacro with-condition-slots ((&rest slots) condition type &body body)
-  `(let ,(loop for s in slots
-	    collect `(,s (,(intern (concatenate 'string
-						(symbol-name type)
-						"-"
-						(symbol-name s)))
-			  ,condition)))
+  `(bind (((:struct ,(intern (concatenate 'string (symbol-name type) "-"))
+             ,@slots)
+           ,condition))
      ,@body))
 
 #|

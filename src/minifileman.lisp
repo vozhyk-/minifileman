@@ -80,29 +80,32 @@
   (go-to-dir (dirname (current-dir panel)) panel))
 
 (defmethod initialize-instance :after ((panel panel) &key (path (config "default-dir")) (master *tk*) grid &allow-other-keys)
-  (with-accessors ((panel-frame panel-frame)
-		   (path-entry path-entry)
-		   (up-button up-button)) panel
-    (let ((listbox (listbox (files-listbox panel))))
-      (bind path-entry "<Return>"
-	    (callback (event)
-	      (go-to-dir (text path-entry) panel)))
-      (let ((go-up-callback (callback (&rest args) (go-up panel))))
-	(setf (command up-button) go-up-callback)
-	(bind panel-frame "<Alt-Key-Up>" go-up-callback) ; for some
-							 ; reason BIND
-							 ; doesn't
-							 ; work on
-							 ; frames
-	(bind listbox "<BackSpace>" go-up-callback))
-      (let ((enter-dir-callback (callback (event)
-				  (go-to-dir (append-pathnames
-					      (text path-entry)
-					      (first (files-listbox-selection panel)))
-					     panel))))
-	(bind listbox "<Double-Button-1>" enter-dir-callback)
-	(bind listbox "<Return>" enter-dir-callback)))
-    (self-autoresize master grid))
+  (bind:bind (((:accessors panel-frame path-entry up-button files-listbox)
+               panel)
+              ((:accessors (entered-path text)) path-entry)
+              ((:accessors listbox) files-listbox)
+              (go-up-callback (callback (&rest args) (go-up panel)))
+              (path-entry-enter-callback
+               (callback (event)
+                 (go-to-dir
+                  (if (string-starts-with "~" entered-path)
+                    (namestring (pathname-as-directory entered-path))
+                    entered-path)
+                  panel)))
+              (enter-dir-callback
+               (callback (event)
+                 (go-to-dir (append-pathnames
+                             (current-dir panel)
+                             (first (files-listbox-selection panel)))
+                            panel))))
+    (bind path-entry "<Return>" path-entry-enter-callback)
+    (setf (command up-button) go-up-callback)
+    ;; for some reason BIND doesn't work on frames
+    (bind panel-frame "<Alt-Key-Up>" go-up-callback)
+    (bind listbox "<BackSpace>" go-up-callback)
+    (bind listbox "<Double-Button-1>" enter-dir-callback)
+    (bind listbox "<Return>" enter-dir-callback))
+  (self-autoresize master grid)
   (and path (go-to-dir path panel)))
 
 (defvar *panel* (list nil nil))

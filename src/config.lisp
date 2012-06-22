@@ -199,7 +199,7 @@ to the config"
    (key :initarg :key :accessor missing-parameter-key)
    (value :initarg :value :accessor missing-parameter-value))
   (:report (lambda (condition stream)
-	     (with-condition-slots (config config-name key) condition missing-parameter
+	     (bind (((:struct missing-parameter- config config-name key) condition))
 	       (format stream "``~a'' is unset in ~a(~a)~%~
                                *silent-set-to-default* => ~a"
 		       key config config-name *silent-set-to-default*)

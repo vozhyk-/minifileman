@@ -6,5 +6,7 @@
   (intern (symbol-name symbol) '#:keyword))
 
 (defmacro destructure-define-args ((&rest names) args &body body)
-  `(let ,(loop for n in names collect `(,n (get-alist (as-keyword ',n) ,args)))
+  `(bind (((:alist ,@(loop for n in names
+                        collect `(,n ,(as-keyword n))))
+           ,args))
      ,@body))

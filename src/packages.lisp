@@ -2,7 +2,8 @@
 
 (defpackage #:minifileman.utils
   (:nicknames #:org.programmingforchildren.minifileman.utils)
-  (:use #:common-lisp)
+  (:use #:metabang-bind
+        #:common-lisp)
   (:import-from #:kmrcl
     #:with-gensyms
     #:it)
@@ -25,15 +26,15 @@
 
 (defpackage #:minifileman.macro-utils
   (:nicknames #:org.programmingforchildren.minifileman.macro-utils)
-  (:use #:common-lisp)
-  (:import-from #:kmrcl
-    #:get-alist)
+  (:use #:metabang-bind
+        #:common-lisp)
   (:export #:as-keyword
 	   #:destructure-define-args))
 
 (defpackage #:minifileman.pathnames
   (:nicknames #:org.programmingforchildren.minifileman.pathnames)
   (:use #:cl-fad
+        #:metabang-bind
         #:common-lisp)
   (:import-from #:kmrcl
     #:escape-backslashes
@@ -65,6 +66,7 @@
   (:use #:minifileman.pathnames
         #:cl-fad
 	#:minifileman.macro-utils
+        #:metabang-bind
 	#:common-lisp)
   (:import-from #:minifileman.utils
     #:ask-read-line

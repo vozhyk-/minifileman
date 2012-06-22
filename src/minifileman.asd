@@ -10,6 +10,9 @@
   :depends-on (#:ltk
                #:cl-fad
                #:closer-mop
+               ;; with :flet and :labels
+               ;; on Gentoo: >metabang-bind-0.7.4
+               #:metabang-bind
                #:kmrcl)
   :components
   ((:file "packages")
