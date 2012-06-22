@@ -60,7 +60,7 @@
 		`((defparameter *config-defaults* ',defaults)
 		  (defparameter *config-dependencies* ',deps))))
      ,(destructure-define-args (default-path) args
-	(when default-path `(defparameter *default-config-path* ,default-path)))
+	(when default-path `(defparameter *default-config-path* ,@default-path)))
      nil))
 
 (defmethod initialize-instance :after ((config config) &key)
