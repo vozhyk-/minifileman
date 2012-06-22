@@ -60,13 +60,6 @@
      do (setf (getf result key) value)
      finally (return result)))
 
-(defun starts-with (beginning string)
-  (and
-   (>= (length string) (length beginning))
-   (string=
-    (subseq string 0 (length beginning))
-    beginning)))
-
 (defun positions (item sequence)
   (loop
      for pos = (position item sequence)

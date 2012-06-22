@@ -16,7 +16,6 @@
 	   #:add-replace-keyword-args
            #:acase
            #:it
-           #:starts-with
            #:positions
            #:nth-comp
 	   #:class-from
@@ -130,6 +129,8 @@
         #:cl-fad
 	#:ltk
 	#:common-lisp)
+  (:import-from #:kmrcl
+    #:string-starts-with)
   (:export #:minifileman
 	   #:minifileman-list-dir
 	   #:quit-minifileman))
