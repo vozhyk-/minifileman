@@ -136,6 +136,8 @@
   (:import-from #:kmrcl
     #:string-starts-with)
   (:export #:minifileman
+           #:*panel*
+           #:go-to-dir
 	   #:minifileman-list-dir
 	   #:quit-minifileman))
 
