@@ -119,6 +119,7 @@
   (:export #:gui-class
 	   #:define-gui-class
 	   #:self-autoresize
+           #:mult-bind
 	   #:callback))
 
 (defpackage #:minifileman

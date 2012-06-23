@@ -130,6 +130,11 @@
     (when (and (find #\w sticky) (find #\e sticky))
       (grid-columnconfigure master (second grid) :weight 1))))
 
+(defun mult-bind (bindings &rest widgets)
+  (dolist (w widgets)
+    (dolist (b bindings)
+      (apply #'bind w b))))
+
 (defmacro callback (args &body body)
   `(lambda ,args
      ,@(nconc
