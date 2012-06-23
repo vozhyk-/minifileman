@@ -73,7 +73,8 @@
   (go-to-dir (dirname (current-dir panel)) panel))
 
 (defmethod initialize-instance :after ((panel panel) &key (path (config "default-dir")) (master *tk*) grid &allow-other-keys)
-  (bind:bind (((:accessors path-entry up-button files-listbox)
+  (bind:bind (((:accessors path-entry up-button files-listbox
+                           command-line-frame shell-switch command-entry) ; all
                panel)
               ((:accessors (entered-path text)) path-entry)
               ((:accessors listbox) files-listbox)
@@ -93,8 +94,9 @@
                             panel))))
     (bind path-entry "<Return>" path-entry-enter-callback)
     (setf (command up-button) go-up-callback)
-    ;; for some reason BIND doesn't work on frames
-    (bind panel "<Alt-Key-Up>" go-up-callback)
+    ;; temporary, will use :bind-contents when it is written
+    (mult-bind `(("<Alt-Key-Up>" ,go-up-callback))
+               path-entry up-button listbox command-line-frame shell-switch command-entry)
     (bind listbox "<BackSpace>" go-up-callback)
     (bind listbox "<Double-Button-1>" enter-dir-callback)
     (bind listbox "<Return>" enter-dir-callback))
