@@ -9,7 +9,6 @@
     #:it)
   (:export #:last1
            #:ask-read-line
-	   #:with-condition-slots
 	   ;#:alist->hash
 	   #:dohash
 	   ;#:skip-keyword-args
@@ -70,8 +69,7 @@
 	#:common-lisp)
   (:import-from #:minifileman.utils
     #:ask-read-line
-    #:dohash
-    #:with-condition-slots)
+    #:dohash)
   (:import-from #:kmrcl
     #:get-alist
     #:let-if

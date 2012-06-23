@@ -19,13 +19,6 @@
      ,@body))
 |#
 
-;;; obsolete, use bind !
-(defmacro with-condition-slots ((&rest slots) condition type &body body)
-  `(bind (((:struct ,(intern (concatenate 'string (symbol-name type) "-"))
-             ,@slots)
-           ,condition))
-     ,@body))
-
 #|
 (defun alist->hash (alist &key (test 'equal))
   (let ((hash (make-hash-table :test test)))
