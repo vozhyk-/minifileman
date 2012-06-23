@@ -14,36 +14,29 @@
   (write-config)
   (setf *exit-mainloop* t))
 
-(define-gui-class panel ()
-  ((panel-frame 'frame
-		:grid :supplied
-		:column-configure '((0 :weight 1))
-		:row-configure '((1 :weight 1))
-     ((path-entry 'entry
-		  :grid '(0 0 :sticky "we"))
-      (up-button 'button
-		 :text "/\\"
-;		 :padx 2
-		 :width 1.5
-		 :background "orange"
-		 :grid '(0 1))
-      (files-listbox 'scrolled-listbox
-		     :grid '(1 0 :sticky "wens"))
-;      (vert-scrollbar 'scrollbar
-;		      :orientation "vertical"
-;		      :grid '(1 1 :sticky "wns"))
-;      (hor-scrollbar 'scrollbar
-;		     :orientation "horizontal"
-;		     :grid '(2 0 :sticky "wen"))
-      (command-line-frame 'frame
-			  :grid '(3 0 :columnspan 2 :sticky "we")
-			  :column-configure '((1 :weight 1))
-	((shell-switch 'check-button
-		       :onvalue "yes"
-		       :offvalue "no"
-		       :grid '(0 0))
-	 (command-entry 'entry ;history-entry
-			:grid '(0 1 :sticky "we")))))))
+(define-gui-class panel (frame)
+  ((path-entry 'entry
+               :grid '(0 0 :sticky "we"))
+   (up-button 'button
+              :text "/\\"
+;              :padx 2
+              :width 1.5
+              :background "orange"
+              :grid '(0 1))
+   (files-listbox 'scrolled-listbox
+                  :grid '(1 0 :sticky "wens"))
+   (command-line-frame 'frame
+                       :grid '(3 0 :columnspan 2 :sticky "we")
+                       :column-configure '((1 :weight 1))
+     ((shell-switch 'check-button
+                    :onvalue "yes"
+                    :offvalue "no"
+                    :grid '(0 0))
+      (command-entry 'entry ;history-entry
+                     :grid '(0 1 :sticky "we")))))
+  (:default-initargs
+   :column-configure '((0 :weight 1))
+   :row-configure '((1 :weight 1)))
   (:simple-slots
    (current-dir :initform "" :accessor current-dir)
    (current-file-list :initform nil :accessor file-list)))
@@ -80,7 +73,7 @@
   (go-to-dir (dirname (current-dir panel)) panel))
 
 (defmethod initialize-instance :after ((panel panel) &key (path (config "default-dir")) (master *tk*) grid &allow-other-keys)
-  (bind:bind (((:accessors panel-frame path-entry up-button files-listbox)
+  (bind:bind (((:accessors path-entry up-button files-listbox)
                panel)
               ((:accessors (entered-path text)) path-entry)
               ((:accessors listbox) files-listbox)
@@ -101,7 +94,7 @@
     (bind path-entry "<Return>" path-entry-enter-callback)
     (setf (command up-button) go-up-callback)
     ;; for some reason BIND doesn't work on frames
-    (bind panel-frame "<Alt-Key-Up>" go-up-callback)
+    (bind panel "<Alt-Key-Up>" go-up-callback)
     (bind listbox "<BackSpace>" go-up-callback)
     (bind listbox "<Double-Button-1>" enter-dir-callback)
     (bind listbox "<Return>" enter-dir-callback))
