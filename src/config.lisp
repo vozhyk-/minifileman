@@ -188,7 +188,7 @@ to the config"
 
 #|
 (defun print-missing-parameter (condition stream)
-  (with-condition-slots (config config-name key) condition missing-parameter
+  (bind (((:struct missing-parameter- config config-name key) condition))
     (format stream "``~a'' is unset in ~a(~a)"
 	    key config config-name)))
 |#
