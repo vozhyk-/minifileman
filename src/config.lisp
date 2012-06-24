@@ -47,18 +47,17 @@
 
 (defmacro define-config ((&rest keys) &body args)
   `(progn
-     ,@(loop
-	  for (name . rest) in keys
-	  for depends-on = (getf rest :depends-on)
-	  for default = (getf rest :default)
-	  if default
-	    collect (cons name default) into defaults
-	  if depends-on
-	    collect `(,name ,depends-on) into deps
-	    finally
-	      (return
-		`((defparameter *config-defaults* ',defaults)
-		  (defparameter *config-dependencies* ',deps))))
+     ,@(iter
+         (for key-spec :in keys)
+         (destructuring-bind (name &key depends-on default) key-spec
+           (when default
+             (collect (cons name default) :into defaults))
+           (when depends-on
+             (collect `(cons ,name ,depends-on) :into deps)))
+         (finally
+          (return
+            `((defparameter *config-defaults* ',defaults)
+              (defparameter *config-dependencies* (list ,@deps))))))
      ,(destructure-define-args (default-path) args
 	(when default-path `(defparameter *default-config-path* ,@default-path)))
      nil))
@@ -236,11 +235,8 @@ to the config"
 		       :value (config key :config config :with-unset t))))
 
 (defun keys-to-check (use &optional (config *config*))
-  (loop
-     for (if what) in (second (assoc use *config-dependencies* :test #'string=))
-     if (eval `(let ((value ,(config use :config config)))
-		 ,if))
-       append (mklist what)))
+  (let ((dep-fun (get-alist use *config-dependencies* :test #'equal)))
+    (mklist (funcall dep-fun (config use :config config)))))
 
 (defun check-use (use &optional (config *config*))
   (let ((set-p (set-p use config)))
