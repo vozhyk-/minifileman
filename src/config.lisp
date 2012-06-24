@@ -43,8 +43,6 @@
 "Config class. Reads from file on initialization. Cannot hold non-string keys
  or values.")) ;!!
 
-;(defparameter *config* (make-instance 'config))
-
 (defmacro define-config ((&rest keys) &body args)
   `(progn
      ,@(iter
@@ -66,9 +64,6 @@
   ;(setf (hash config) (alist->hash (hash config)))
   (read-config :config config))
 
-;(defgeneric config (key &optional config)
-;  (:documentation "Get the value of a config parameter"))
-
 (defun config (key &key (config *config*) raw-value with-unset)
   "Gets the value of a config parameter"
   (multiple-value-bind (value present) (gethash key (hash config))
@@ -89,13 +84,6 @@
 
 (defgeneric (setf config) (value key &key config raw-value)
   (:documentation "Sets the value of a config parameter"))
-
-;(defmethod (setf config) (value key &optional (config *config*))
-;  (setf (gethash key (hash config)) 
-;	(cond
-;	  ((eql value t) "yes")
-;	  ((null value) "no")
-;	  (t value))))
 
 (defmethod (setf config) (value
 			  key &key (config *config*) raw-value)
@@ -120,27 +108,13 @@
 (defun set-to-default (key &optional (config *config*))
   (setf (config key :config config) (default key)))
 
-;(defgeneric remconfig (key &optional config)
-;  (:documentation "Remove a parameter from config"))
-
 (defun remconfig (key &optional (config *config*))
   "Remove a parameter from config"
   (remhash key (hash config)))
 
-;(defgeneric clear-config (&optional config)
-;  (:documentation "Remove all parameters from the config"))
-
 (defun clear-config (&optional (config *config*))
   "Remove all parameters from the config"
   (clrhash (hash config)))
-
-;(defgeneric add-line (line &optional config)
-;  (:documentation "Add a config entry in the form
-;  \"<variable> <value>\"
-; or
-;  \"<comment>\"
-;to the config"))
-
 (defun add-line (line &optional (config *config*))
   "Add a config entry in the form
   \"<variable> <value>\"
@@ -152,23 +126,9 @@ to the config"
           (subseq line (1+ space-pos)))
     (add-comment line config)))
 
-;(defgeneric add-comment (comment &optional config)
-;  (:documentation "Add a comment to the config"))
-
 (defun add-comment (comment &optional (config *config*))
   "Add a comment to the config"
   (setf (config comment :config config :raw-value t) nil))
-
-;(defgeneric read-config (&optional config path)
-;  (:documentation "Read the config from file, replacing existing entries"))
-
-;(defmethod read-config (&optional (config *config*)
-;			          (path (path config)))
-;  (with-accessors ((file config-file-stream) path) config
-;    (with-open-file (file path :if-does-not-exist nil)
-;      (when file)
-;	(loop for line = (read-line file nil nil) while line
-;	   do (add-line line config))))))
 
 (defun read-config (&key (config *config*) (path (path config)))
   "Read the config from file, replacing existing entries"
@@ -182,9 +142,6 @@ to the config"
   `(iter
      (for (,key ,value) :in-hashtable (hash ,config))
      ,@body))
-
-;(defgeneric print-config (&optional config stream)
-;  (:documentation "Print the config to stream"))
 
 #|
 (defun print-missing-parameter (condition stream)
@@ -271,20 +228,6 @@ to the config"
       (format stream "~a~2@*~:[ ~;~35t~]~1@*~a~%" key value pretty)
       (write-line key stream)))
   (force-output stream))
-
-;(defgeneric write-config (&optional config path)
-;  (:documentation "Write the config to file"))
-
-;(defmethod write-config (&optional (config *config*)
-;			           (path (path config)))
-;  (with-accessors ((file config-file-stream) path) config
-;    (with-open-file (file path 
-;			  :if-does-not-exist :create
-;			  :if-exists :subersede)
-;      (doconfig (key value config)
-;	(if value
-;	  (format file "~a ~a~%" key value)
-;	  (write-line key file))))))
 
 (defun write-config (&key (config *config*) (path (path config)))
   "Write the config to file"
