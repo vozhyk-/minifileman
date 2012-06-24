@@ -55,6 +55,10 @@
      for i from 1 to n
      finally (return result)))
 
+(defun ordinary-lambda-list-vars (lambda-list)
+  (multiple-value-bind (req opt rest key) (parse-ordinary-lambda-list lambda-list)
+    (append req (mapcar #'first opt) (mklist rest) (mapcar #'cadar key))))
+
 (defun class-from (name-or-class)
   (if (not (typep name-or-class 'standard-class))
       (find-class name-or-class)

@@ -14,6 +14,7 @@
                ;; on Gentoo: >metabang-bind-0.7.4
                #:metabang-bind
                #:iterate
+               #:alexandria
                #:kmrcl)
   :components
   ((:file "packages")

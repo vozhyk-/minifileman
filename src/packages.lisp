@@ -5,8 +5,11 @@
   (:use #:metabang-bind
         #:common-lisp)
   (:import-from #:kmrcl
+    #:mklist
     #:with-gensyms
     #:it)
+  (:import-from #:alexandria
+    #:parse-ordinary-lambda-list)
   (:export #:last1
            #:ask-read-line
 	   ;#:alist->hash
@@ -17,6 +20,7 @@
            #:it
            #:positions
            #:nth-comp
+           #:ordinary-lambda-list-vars
 	   #:class-from
 	   #:class-precedence-list
 	   #:superclass-p
