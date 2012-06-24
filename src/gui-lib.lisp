@@ -50,10 +50,7 @@
 		       &allow-other-keys)
 		      spec
 		      result)
-  (let ((slot-bind-args (add-replace-keyword-args
-			 (remove-keyword-args slot-bind-args :whole-slot :master :initial-master :nconc)
-			 :name name
-			 :content content)))
+  (let ((slot-bind-args `(:name ,name :content ,content :allow-other-keys t ,@slot-bind-args)))
     (with-gensyms (fun-name spec-var)
       `(labels ((,fun-name (,spec-var ,master-var)
 		  (declare (ignorable ,master-var))
