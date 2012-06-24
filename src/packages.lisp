@@ -111,6 +111,7 @@
     #:add-replace-keyword-args
     #:acase
     #:last1
+    #:ordinary-lambda-list-vars
     #:superclass-p
     #:append-new-superclasses)
   (:import-from #:kmrcl

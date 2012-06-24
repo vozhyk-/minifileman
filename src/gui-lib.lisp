@@ -134,10 +134,5 @@
 
 (defmacro callback (args &body body)
   `(lambda ,args
-     ,@(nconc
-        (let-when (1st-arg (first args))
-          (if (char/= (elt (symbol-name 1st-arg) 0)
-                      #\&)
-              `((declare (ignorable ,1st-arg)))
-              `((declare (ignorable ,(second args))))))
-	body)))
+     (declare (ignorable ,@(ordinary-lambda-list-vars args)))
+     ,@body))
