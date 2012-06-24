@@ -157,10 +157,8 @@ to the config"
    (value :initarg :value :accessor missing-parameter-value))
   (:report (lambda (condition stream)
 	     (bind (((:struct missing-parameter- config config-name key) condition))
-	       (format stream "``~a'' is unset in ~a(~a)~%~
-                               *silent-set-to-default* => ~a"
-		       key config config-name *silent-set-to-default*)
-	       (format stream "~&~a" (find-restart 'store-default))))))
+	       (format stream "``~a'' is unset in ~a(~a)"
+		       key config config-name)))))
 
 (defun missing-parameter (&key
 			 (config-name '*config*)
@@ -175,8 +173,7 @@ to the config"
 				    (setf (config key :config config) value)
 				    (continue))
 		     :interactive-function #'(lambda () (list (ask-read-line "Enter the new value for the config variable")))
-		     :report-function (formatter "Set the config variable to a given value."))
-		   #|(continue #'(lambda () nil))|#)
+		     :report-function (formatter "Set the config variable to a given value.")))
       (error 'missing-parameter
 	     :config-name config-name
 	     :config config
@@ -188,12 +185,15 @@ to the config"
 
 (defun check-key (key &optional (config *config*))
   (when (not (set-p key config))
-    (missing-parameter :key key
-		       :config config
-		       :value (config key :config config :with-unset t))))
+    (handler-bind ((missing-parameter #'(lambda (c)
+                                          (if *silent-set-to-default*
+                                            (invoke-restart 'store-default)
+                                            (error c)))))
+      (missing-parameter :key key
+                         :config config))))
 
 (defun keys-to-check (use &optional (config *config*))
-  (let ((dep-fun (get-alist use *config-dependencies* :test #'equal)))
+  (let ((dep-fun (get-alist use *config-dependencies* :test #'equal))) ; string=?
     (mklist (funcall dep-fun (config use :config config)))))
 
 (defun check-use (use &optional (config *config*))
@@ -206,18 +206,10 @@ to the config"
 		   (restart-case (check-key key config)
 		     (continue () (check (rest list)))))))
 	(check (keys-to-check use config))))))
-;      (dolist (key (keys-to-check use config))
-;	(check-key key config)))))
 
 (defun check-config (&optional (config *config*))
-  #|(dolist (key *keys-to-check*)
-    (check-key key config))|#
-  (handler-bind ((missing-parameter #'(lambda (c)
-				       (if *silent-set-to-default*
-					 (store-default)
-					 (error c)))))
-    (dolist (use (use-to-check))
-      (check-use use config))))
+  (dolist (use (use-to-check))
+    (check-use use config)))
 
 (defun print-config (&key (config *config*)
 		          (stream *standard-output*)
