@@ -110,6 +110,7 @@
         (*default-pathname-defaults* *default-pathname-defaults*))
     (with-ltk ()
       (wm-title *tk* "minifileman-0.1.0")
+      (bind *tk* "<Destroy>" #'quit-minifileman)
       (bind *tk* "<Control-q>" #'quit-minifileman)
       (setf (first  *panel*) (make-instance 'panel :grid '(0 0 :sticky "wens")))
       (setf (second *panel*) (make-instance 'panel :grid '(0 1 :sticky "wens"))))))
