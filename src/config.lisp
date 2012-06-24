@@ -179,7 +179,8 @@ to the config"
 	   do (add-line line config))))))
 
 (defmacro doconfig ((key value &optional (config '*config*)) &body body)
-  `(dohash (,key ,value (hash ,config))
+  `(iter
+     (for (,key ,value) :in-hashtable (hash ,config))
      ,@body))
 
 ;(defgeneric print-config (&optional config stream)
