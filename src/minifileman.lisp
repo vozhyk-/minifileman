@@ -11,6 +11,7 @@
 
 (defun quit-minifileman (&optional event)
   (declare (ignore event))
+  (print 'quit)
   (write-config)
   (setf *exit-mainloop* t))
 
