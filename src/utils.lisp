@@ -5,6 +5,7 @@
 
 (defun ask-read-line (question &optional (stream *query-io*))
   (format stream "~a: " question)
+  (force-output stream)
   (read-line stream nil ""))
 
 #|
