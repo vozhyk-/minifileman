@@ -10,7 +10,6 @@
   (:export #:last1
            #:ask-read-line
 	   ;#:alist->hash
-	   #:dohash
 	   ;#:skip-keyword-args
 	   #:remove-keyword-args
 	   #:add-replace-keyword-args
@@ -69,8 +68,7 @@
         #:iterate
 	#:common-lisp)
   (:import-from #:minifileman.utils
-    #:ask-read-line
-    #:dohash)
+    #:ask-read-line)
   (:import-from #:kmrcl
     #:get-alist
     #:let-if

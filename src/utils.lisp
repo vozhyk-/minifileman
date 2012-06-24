@@ -3,12 +3,6 @@
 (defun last1 (list)
   (first (last list)))
 
-;(defun copy-hash (hash &key (test 'equal))
-;  (let ((new-hash (make-hash-table :test test)))
-;    (dohash (key value hash)
-;      (setf (gethash key new-hash) value))
-;    new-hash))
-
 (defun ask-read-line (question &optional (stream *query-io*))
   (format stream "~a: " question)
   (read-line stream nil ""))
@@ -26,10 +20,6 @@
        do (setf (gethash key hash) value)
        finally (return hash))))
 |#
-
-(defmacro dohash ((key value hash) &body body)
-  `(loop for ,key being the hash-keys in ,hash using (hash-value ,value)
-      do ,@body))
 
 #|
 (defun skip-keyword-args (args)
