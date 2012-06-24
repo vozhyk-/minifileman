@@ -13,6 +13,7 @@
                ;; with :flet and :labels
                ;; on Gentoo: >metabang-bind-0.7.4
                #:metabang-bind
+               #:iterate
                #:kmrcl)
   :components
   ((:file "packages")

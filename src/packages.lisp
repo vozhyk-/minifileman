@@ -66,6 +66,7 @@
         #:cl-fad
 	#:minifileman.macro-utils
         #:metabang-bind
+        #:iterate
 	#:common-lisp)
   (:import-from #:minifileman.utils
     #:ask-read-line
