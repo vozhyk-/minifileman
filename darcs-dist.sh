@@ -6,7 +6,7 @@ shift; shift
 darcs_options="$@"
 
 echo Running \`\`darcs dist ${darcs_options} -d "$name"\'\'...
-darcs dist ${darcs_options} -d "$name"
+darcs dist ${darcs_options} --set-scripts-executable -d "$name"
 
 if [[ "$format" != gz ]]
 then
