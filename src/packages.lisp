@@ -42,7 +42,6 @@
     #:escape-backslashes
     #:mklist)
   (:export #:topathname
-           #:nonempty-pathname-p
            #:append-pathnames
 	   #:expand-pathname
 	   #:directory-pathname-p

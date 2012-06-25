@@ -13,18 +13,6 @@
                 name))
   #-(and (or sbcl cmu) unix) (pathname name))
 
-(defun nonempty-pathname-p (pathname)
-  (and
-   (find-if #'(lambda (x) (cl-fad::component-present-p (funcall x pathname)))
-            (list
-             #'pathname-host
-             #'pathname-device
-             #'pathname-directory
-             #'pathname-name
-             #'pathname-type
-             #'pathname-version))
-   pathname))
-
 (defun absolute-pathname-p (pathname)
   (eql (first (pathname-directory pathname))
        :absolute))
