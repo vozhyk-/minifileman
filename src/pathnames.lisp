@@ -39,7 +39,7 @@
     (and
      (not (fad::component-present-p name))
      (not (fad::component-present-p type))
-     (eql directory '(:absolute)))))
+     (equal directory '(:absolute)))))
 
 #+(and (or sbcl cmu) unix)
 ;;; Redefine cl-fad:pathname-as-file (use topathname)
