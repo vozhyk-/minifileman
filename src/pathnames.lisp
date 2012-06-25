@@ -41,6 +41,15 @@
      (not (fad::component-present-p type))
      (equal directory '(:absolute)))))
 
+(defun home-p (pathspec)
+  (bind ((pn (topathname pathspec))
+         ((:structure pathname- directory name type) pn))
+    (and
+     (not (fad::component-present-p name))
+     (not (fad::component-present-p type))
+     (home-pathname-p pn)
+     (= (length directory) 2))))
+
 #+(and (or sbcl cmu) unix)
 ;;; Redefine cl-fad:pathname-as-file (use topathname)
 (defun pathname-as-file (pathspec)

@@ -49,6 +49,7 @@
 	   #:absolute-pathname-p
            #:home-pathname-p
            #:root-p
+           #:home-p
 	   #:true-pathname-form
 	   #:preserve-pathname-directory-form
 	   #:basename
