@@ -29,6 +29,10 @@
   (eql (first (pathname-directory pathname))
        :absolute))
 
+(defun home-pathname-p (pathname)
+  (eql (first (mklist (second (pathname-directory pathname))))
+       :home))
+
 (defun root-p (pathspec)
   (bind ((pn (topathname pathspec))
          ((:structure pathname- directory name type) pn))
@@ -101,11 +105,9 @@
       :defaults (pathname-as-file pathname)))))
 
 (defun expand-pathname (pathspec)
-  (bind (((:labels homep (dir-el))
-            (eql (first (mklist dir-el)) :home))
-         (pathname (topathname pathspec))
+  (let* ((pathname (topathname pathspec))
          (directory (pathname-directory pathname)))
-    (if (homep (second directory))
+    (if (home-pathname-p pathname)
       (append-pathnames
        (truename (make-pathname
                   :directory (subseq directory 0 2)
