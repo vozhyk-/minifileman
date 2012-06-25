@@ -1,53 +1,28 @@
-#!/bin/bash
+#!/bin/sh
 
-if [[ "$1" == "DEV" ]]
-then
-    suffix="dev`date +%Y%m%d.%H.%M`"
-else
-    suffix="$1"
-fi
-archive="rest/dist/minifileman-${suffix}.tar"
-
-if [[ "$2" == "" ]]
-then
-    format="bz2"
-else
-    format="$2"
-fi
-case "$format" in
-    gz)
-	compressor=gzip
-	;;
-    bz2)
-	compressor=bzip2
-	;;
-    lzma)
-	compressor=lzma
-	;;
-    *)
-	echo The compression format $format isn\'t supported.
-	exit 1
-esac
-
-echo Creating distribution tarball ${archive}.${format}...
+source ./dist-common.sh
 
 echo Tarring...
-tar -cvf ${archive}\
+tar -cvf "${archive}"\
  doc/{LICENSE,TODO}\
  icons/minifileman{,-notext}.svg\
+ src/minifileman.asd\
  src/config{,-test}.lisp\
  src/ltk-ext.lisp\
  src/gui-lib.lisp\
- src/helpers.lisp\
+ src/path-entry.lisp\
+ src/utils.lisp\
  src/load.lisp\
  src/packages.lisp\
- src/macro-helpers.lisp\
+ src/macro-utils.lisp\
  src/pathnames.lisp\
  src/filesystem.lisp\
  src/minifileman.lisp\
- dist.sh
+ portage/app-misc/minifileman/minifileman-0.1.0.ebuild\
+ dist.sh\
+ darcs-dist.sh\
+ dist-common.sh
 
-echo Compressing...
-${compressor} -9v ${archive}
+dist_compress
 
-echo Done.
+dist_done
