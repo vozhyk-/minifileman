@@ -96,23 +96,6 @@
 		 :version (pathname-version second))
 		(cddr names)))))))
 
-(defun basename (name)
-  (let ((pathname (topathname name)))
-    (if (not (root-p pathname))
-      (preserve-pathname-directory-form (make-pathname
-					 :directory nil
-					 :defaults (pathname-as-file pathname))
-					pathname)
-      pathname)))
-
-(defun dirname (name)
-  (let ((pathname (topathname name)))
-    (pathname-as-directory
-     (make-pathname
-      :name nil
-      :type nil
-      :defaults (pathname-as-file pathname)))))
-
 (defun expand-pathname (pathspec)
   (let* ((pathname (topathname pathspec))
          (directory (pathname-directory pathname)))
@@ -125,6 +108,27 @@
         :directory (cons :relative (cddr directory))
         :defaults pathname))
       pathname)))
+
+(defun basename (name)
+  (let ((pn (topathname name)))
+    (cond
+      ((root-p pn) pn)
+      ((home-p pn) (basename (expand-pathname pn)))
+      (t (preserve-pathname-directory-form
+          (make-pathname
+           :directory nil
+           :defaults (pathname-as-file pn))
+          pn)))))
+
+(defun dirname (name)
+  (let ((pn (topathname name)))
+    (cond
+      ((root-p pn) pn)
+      ((home-p pn) (dirname (expand-pathname pn)))
+      (t (make-pathname
+          :name nil
+          :type nil
+          :defaults (pathname-as-file pn))))))
 
 (defun directory-p (pathspec)
   (directory-exists-p pathspec))
