@@ -9,12 +9,6 @@
       (list-directory-relative dir)
       (error "Not a directory: ~a" dir))))
 
-(defun quit-minifileman (&optional event)
-  (declare (ignore event))
-  (print 'quit)
-  (write-config)
-  (setf *exit-mainloop* t))
-
 (define-gui-class panel (frame)
   ((path-entry 'entry
                :grid '(0 0 :sticky "we"))
@@ -40,7 +34,8 @@
    :row-configure '((1 :weight 1)))
   (:simple-slots
    (current-dir :initform "" :accessor current-dir)
-   (current-file-list :initform nil :accessor file-list)))
+   (current-file-list :initform nil :accessor file-list)
+   (name :initarg :name :initform "" :accessor name)))
 
 (defmethod (setf current-dir) :after (new-dir (panel panel))
   (let ((path-entry (path-entry panel)))
@@ -73,7 +68,21 @@
 (defun go-up (panel)
   (go-to-dir (dirname (current-dir panel)) panel))
 
-(defmethod initialize-instance :after ((panel panel) &key (path (config "default-dir")) (master *tk*) grid &allow-other-keys)
+(defun last-dir (panel)
+  (config (concatenate 'string
+                       "last-dir:"
+                       (name panel))))
+
+(defun (setf last-dir) (new-dir panel)
+  (setf (config (concatenate 'string
+                             "last-dir:"
+                             (name panel)))
+        new-dir))
+
+(defun save-last-dir (panel)
+  (setf (last-dir panel) (current-dir panel)))
+
+(defmethod initialize-instance :after ((panel panel) &key path (master *tk*) grid &allow-other-keys)
   (bind:bind (((:accessors path-entry up-button files-listbox
                            command-line-frame shell-switch command-entry) ; all
                panel)
@@ -102,9 +111,17 @@
     (bind listbox "<Double-Button-1>" enter-dir-callback)
     (bind listbox "<Return>" enter-dir-callback))
   (self-autoresize master grid)
-  (and path (go-to-dir path panel)))
+  (go-to-dir (or path (last-dir panel) (config "default-dir")) panel))
 
 (defvar *panel* (list nil nil))
+
+(defun quit-minifileman (&optional event)
+  (declare (ignore event))
+  (print 'quit)
+  (save-last-dir (first  *panel*))
+  (save-last-dir (second *panel*))
+  (write-config)
+  (setf *exit-mainloop* t))
 
 (defun minifileman ()
   (let ((*config* (make-instance 'config))
@@ -113,5 +130,5 @@
       (wm-title *tk* "minifileman-0.1.0")
       (bind *tk* "<Destroy>" #'quit-minifileman)
       (bind *tk* "<Control-q>" #'quit-minifileman)
-      (setf (first  *panel*) (make-instance 'panel :grid '(0 0 :sticky "wens")))
-      (setf (second *panel*) (make-instance 'panel :grid '(0 1 :sticky "wens"))))))
+      (setf (first  *panel*) (make-instance 'panel :name "1" :grid '(0 0 :sticky "wens")))
+      (setf (second *panel*) (make-instance 'panel :name "2" :grid '(0 1 :sticky "wens"))))))
