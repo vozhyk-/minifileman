@@ -5,6 +5,5 @@
 		      :depends-on
                       #'(lambda (value)
                           (when (eql value t) "default_dir")))
-   ("default-dir" :default "/"))
-  (:default-path #P"/home/vozhyk/.minifileman/minifileman.conf"))
+   ("default-dir" :default "/")))
 (defparameter *config* (make-instance 'config))
