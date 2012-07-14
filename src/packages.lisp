@@ -7,11 +7,13 @@
   (:import-from #:kmrcl
     #:mklist
     #:with-gensyms
+    #:_f
     #:it)
   (:import-from #:alexandria
     #:parse-ordinary-lambda-list)
   (:export #:last1
            #:ask-read-line
+           #:_f2
 	   ;#:alist->hash
 	   ;#:skip-keyword-args
 	   #:remove-keyword-args

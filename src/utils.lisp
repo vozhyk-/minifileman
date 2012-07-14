@@ -84,3 +84,9 @@
   `(let ((it ,keyform))
      (case it
        ,@clauses)))
+
+(defmacro _f2 (op arg place &rest args)
+  (with-gensyms (place-var arg1 args-var)
+    `(_f (lambda (,place-var ,arg1 &rest ,args-var)
+           (apply #',op ,arg1 ,place-var ,args-var))
+         ,place ,arg ,@args)))
