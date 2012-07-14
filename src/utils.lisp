@@ -81,9 +81,9 @@
 
 (defun superclass-p (superclass &optional (class nil class-supplied-p))
   (if class-supplied-p
-	(find (class-from superclass)
-		  (class-precedence-list (class-from class)))
-	(lambda (class) (superclass-p superclass class))))
+      (find (class-from superclass)
+            (class-precedence-list (class-from class)))
+      (lambda (class) (superclass-p superclass class))))
 
 (defun append-new-superclasses (orig &rest new)
   (dolist (new-sup new orig)
