@@ -22,7 +22,8 @@
    (:file "macro-utils" :depends-on ("packages"))
    (:file "pathnames" :depends-on ("utils"))
    (:file "filesystem" :depends-on ("pathnames"))
-   (:file "config" :depends-on ("pathnames" "macro-utils"))
+   (:file "safe-assoc")
+   (:file "config" :depends-on ("pathnames" "macro-utils" "safe-assoc"))
    (:file "ltk-ext")
    (:file "gui-lib" :depends-on ("ltk-ext" "utils" "macro-utils"))
    (:file "minifileman"

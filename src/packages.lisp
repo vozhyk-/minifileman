@@ -73,39 +73,23 @@
               #:org.programmingforchildren.minifileman.config)
   (:use #:minifileman.pathnames
         #:cl-fad
-	#:minifileman.macro-utils
-        #:metabang-bind
+	#:metabang-bind
         #:iterate
 	#:common-lisp)
   (:import-from #:minifileman.utils
-    #:ask-read-line)
+    #:_f2
+    #:last1)
   (:import-from #:kmrcl
     #:get-alist
-    #:let-if
+    #:remove-alist
     #:mklist)
-  (:export #:define-config
-           #:*default-config-path*
-	   #:*config-defaults*
-	   #:*config-dependencies*
+  (:export #:*default-config-path*
 	   #:*config*
 	   #:config
-	   #:default
-	   #:set-to-default
-	   #:set-p
-	   #:path
-	   #:hash
-	   #:remconfig
-	   #:clear-config
-	   #:add-line
-	   #:add-comment
+           #:config*
+	   #:remove-config
 	   #:read-config
-	   #:doconfig
-	   #:print-config
-	   #:write-config
-	   #:check-config
-	   #:mising-parameter
-	   ;#:*config-key-unsets*
-	   ))
+	   #:write-config))
 
 (defpackage #:minifileman.gui-lib
   (:nicknames #:org.programmingforchildren.minifileman.gui-lib)
