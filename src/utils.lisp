@@ -3,6 +3,10 @@
 (defun last1 (list)
   (first (last list)))
 
+(defun less-if (pred)
+  #l(and (funcall pred !1)
+         (not (funcall pred !2))))
+
 (defun ask-read-line (question &optional (stream *query-io*))
   (format stream "~a: " question)
   (force-output stream)
