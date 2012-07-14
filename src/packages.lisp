@@ -141,6 +141,7 @@
 	#:minifileman.gui-lib
         #:cl-fad
 	#:ltk
+        #:iterate
 	#:common-lisp)
   (:import-from #:minifileman.utils
     #:multi-level-sort
