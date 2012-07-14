@@ -156,6 +156,7 @@
 
 (defpackage #:minifileman-user
   (:use #:minifileman
+        #:iterate
         #:minifileman.utils
         #:kmrcl
         #:cl-fad
@@ -166,6 +167,11 @@
 	#:ltk
         #:common-lisp
 	#:common-lisp-user)
+  (:shadowing-import-from #:iterate
+    #:while
+    #:for
+    #:until
+    #:in)
   (:shadowing-import-from #:kmrcl
     #:copy-file
     #:delete-directory-and-files))
