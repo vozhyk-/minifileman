@@ -142,6 +142,9 @@
         #:cl-fad
 	#:ltk
 	#:common-lisp)
+  (:import-from #:minifileman.utils
+    #:multi-level-sort
+    #:less-if)
   (:import-from #:kmrcl
     #:string-starts-with)
   (:export #:minifileman

@@ -9,6 +9,15 @@
       (list-directory dir :resolve-symlinks nil)
       (error "Not a directory: ~a" dir))))
 
+(setf (fdefinition 'by-name) #'string<)
+(setf (fdefinition 'by-directory-p) (less-if #'directory-p))
+
+(defparameter *minifileman-sort-preds*
+  (list #'by-directory-p #'by-name))
+
+(defun minifileman-sort-file-list (list)
+  (multi-level-sort list *minifileman-sort-preds* :key #'namestring))
+
 (define-gui-class panel (frame)
   ((path-entry 'entry
                :grid '(0 0 :sticky "we"))
@@ -44,11 +53,12 @@
 
 (defun file-list-for-display (list)
   (mapcar #'basename
-          #+(and openmcl unix)
+          (minifileman-sort-file-list
+           #+(and openmcl unix)
            (mapcar #'(lambda (x)
                        (remove ccl::*pathname-escape-character* (namestring x))) ; everywhere?
                    list)
-          #-(and openmcl unix) list)))
+           #-(and openmcl unix) list)))
 
 (defmethod (setf file-list) :after (new-list (panel panel))
   (let ((listbox (files-listbox panel)))
