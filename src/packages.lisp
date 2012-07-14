@@ -3,6 +3,7 @@
 (defpackage #:minifileman.utils
   (:nicknames #:org.programmingforchildren.minifileman.utils)
   (:use #:metabang-bind
+        #:iterate
         #:common-lisp)
   (:import-from #:kmrcl
     #:mklist
@@ -14,6 +15,7 @@
   (:export #:last1
            #:less-if
            #:ask-read-line
+           #:multi-level-sort
            #:_f2
 	   ;#:alist->hash
 	   ;#:skip-keyword-args

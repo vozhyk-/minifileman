@@ -34,6 +34,13 @@
      finally (return result)))
 |#
 
+(defun multi-level-sort (seq levels &key (key #'identity))
+  (iter
+    (initially (setf result seq))
+    (for p :in (reverse levels))
+    (for result := (stable-sort result p :key key))
+    (finally (return result))))
+
 (defun remove-keyword-args (args &rest keywords)
   (let ((result (copy-tree args)))
     (dolist (kw keywords result)
