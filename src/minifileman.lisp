@@ -6,7 +6,7 @@
 (defun minifileman-list-dir (dir)
   (let ((dir (pretty-directory dir)))
     (if (directory-p dir)
-      (list-directory-relative dir)
+      (list-directory dir :resolve-symlinks nil)
       (error "Not a directory: ~a" dir))))
 
 (define-gui-class panel (frame)
@@ -43,11 +43,12 @@
     (setf (cursor-index path-entry) :end)))
 
 (defun file-list-for-display (list)
-  #+(and openmcl unix)
-  (mapcar #'(lambda (x)
-              (remove ccl::*pathname-escape-character* (namestring x))) ; everywhere?
-          list)
-  #-(and openmcl unix) list)
+  (mapcar #'basename
+          #+(and openmcl unix)
+           (mapcar #'(lambda (x)
+                       (remove ccl::*pathname-escape-character* (namestring x))) ; everywhere?
+                   list)
+          #-(and openmcl unix) list)))
 
 (defmethod (setf file-list) :after (new-list (panel panel))
   (let ((listbox (files-listbox panel)))
@@ -98,9 +99,7 @@
                   panel)))
               (enter-dir-callback
                (callback (event)
-                 (go-to-dir (append-pathnames
-                             (current-dir panel)
-                             (first (files-listbox-selection panel)))
+                 (go-to-dir (first (files-listbox-selection panel))
                             panel))))
     (bind path-entry "<Return>" path-entry-enter-callback)
     (setf (command up-button) go-up-callback)
