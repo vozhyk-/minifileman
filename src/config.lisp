@@ -39,26 +39,33 @@
     (for result := (safe-get-alist v result))
     (finally (return result))))
 
-(defmacro config* (path &optional (config '*config*))
+(defmacro configq (path &optional (config '*config*))
   `(config ',path ,config))
+
+(defun path-nest (path val)
+  (if (= (length path) 1)
+    (cons (first path) val)
+    (list (first path) (path-nest (rest path) val))))
 
 (defun (setf config) (new-val path &optional (config *config*))
   (let ((path (mklist path)))
     (cond
       ((null path) config)
       ((= (length path) 1)
-       (setf (get-alist (first path) config) new-val))
+       (setf (safe-get-alist (first path) config) new-val))
       (t
        (bind (((first &rest rest) path))
          (symbol-macrolet ((first-config (config first config))
                            (rest-config (config rest first-config)))
            (setf first-config
-                 (progn
-                   (setf rest-config new-val)
-                   first-config))
+                 (if (null first-config)
+                   (list (path-nest rest new-val))
+                   (progn
+                     (setf rest-config new-val)
+                     first-config)))
            new-val))))))
 
-(defun remove-config (path &optional (config *config*))
+(defun delete-config (path &optional (config *config*))
   "Remove config variable. Can be destructive"
   (let ((path (mklist path)))
     (cond
@@ -72,5 +79,5 @@
       (path (safe-remove-alist (first path) config))
       (t config))))
 
-(defmacro remove-config! (path &optional (config '*config*))
-  `(setf ,config (remove-config ,path ,config)))
+(defmacro delete-config! (path &optional (config '*config*))
+  `(setf ,config (delete-config ,path ,config)))

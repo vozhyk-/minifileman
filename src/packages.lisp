@@ -86,8 +86,9 @@
   (:export #:*default-config-path*
 	   #:*config*
 	   #:config
-           #:config*
-	   #:remove-config
+           #:configq
+	   #:delete-config
+	   #:delete-config!
 	   #:read-config
 	   #:write-config))
 

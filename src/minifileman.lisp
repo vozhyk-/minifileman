@@ -18,6 +18,8 @@
 (defun minifileman-sort-file-list (list)
   (multi-level-sort list *minifileman-sort-preds* :key #'namestring))
 
+(defparameter *default-panel-name* 'default)
+
 (define-gui-class panel (frame)
   ((path-entry 'entry
                :grid '(0 0 :sticky "we"))
@@ -44,7 +46,7 @@
   (:simple-slots
    (current-dir :initform "" :accessor current-dir)
    (current-file-list :initform nil :accessor file-list)
-   (name :initarg :name :initform "" :accessor name)))
+   (name :initarg :name :initform *default-panel-name* :accessor name)))
 
 (defmethod (setf current-dir) :after (new-dir (panel panel))
   (let ((path-entry (path-entry panel)))
@@ -80,14 +82,10 @@
   (go-to-dir (dirname (current-dir panel)) panel))
 
 (defun last-dir (panel)
-  (config (concatenate 'string
-                       "last-dir:"
-                       (name panel))))
+  (config `(panel ,(name panel) last-dir)))
 
 (defun (setf last-dir) (new-dir panel)
-  (setf (config (concatenate 'string
-                             "last-dir:"
-                             (name panel)))
+  (setf (config `(panel ,(name panel) last-dir))
         new-dir))
 
 (defun save-last-dir (panel)
@@ -120,7 +118,7 @@
     (bind listbox "<Double-Button-1>" enter-dir-callback)
     (bind listbox "<Return>" enter-dir-callback))
   (self-autoresize master grid)
-  (go-to-dir (or path (last-dir panel) (config "default-dir")) panel))
+  (go-to-dir (or path (last-dir panel) (configq default-dir)) panel))
 
 (defvar *panel* (list nil nil))
 
@@ -133,11 +131,11 @@
   (setf *exit-mainloop* t))
 
 (defun minifileman ()
-  (let ((*config* (make-instance 'config))
+  (let ((*config* (read-config))
         (*default-pathname-defaults* *default-pathname-defaults*))
     (with-ltk ()
       (wm-title *tk* "minifileman-0.1.0")
       (bind *tk* "<Destroy>" #'quit-minifileman)
       (bind *tk* "<Control-q>" #'quit-minifileman)
-      (setf (first  *panel*) (make-instance 'panel :name "1" :grid '(0 0 :sticky "wens")))
-      (setf (second *panel*) (make-instance 'panel :name "2" :grid '(0 1 :sticky "wens"))))))
+      (setf (first  *panel*) (make-instance 'panel :name 1 :grid '(0 0 :sticky "wens")))
+      (setf (second *panel*) (make-instance 'panel :name 2 :grid '(0 1 :sticky "wens"))))))
