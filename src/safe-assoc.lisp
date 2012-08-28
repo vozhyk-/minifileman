@@ -2,13 +2,13 @@
 
 (in-package #:minifileman.config)
 
-(defun safe-assoc-test (key test)
+(defun safe-assoc-test (akey eq-test)
   #'(lambda (x)
       (and (listp x)
            (let ((f (first x)))
-             (funcall test
+             (funcall eq-test
                       f
-                      key)))))
+                      akey)))))
 
 (defun safe-assoc (key alist &key (test #'equal))
   (find-if (safe-assoc-test key test)
