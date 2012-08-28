@@ -10,7 +10,7 @@
   #-(or unix win32)
    (error "Not implemented"))
 
-(defvar *config*)
+(defvar *config* nil)
 
 (defun read-list (stream)
   (iter
