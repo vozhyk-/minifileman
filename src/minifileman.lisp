@@ -124,7 +124,7 @@
 
 (defun quit-minifileman (&optional event)
   (declare (ignore event))
-  (print 'quit)
+  (print 'quit) ; debug
   (save-last-dir (first  *panel*))
   (save-last-dir (second *panel*))
   (write-config)
