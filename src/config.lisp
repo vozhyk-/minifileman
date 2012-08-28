@@ -22,7 +22,8 @@
   (when (and path (not (equal path "")))
     (with-open-file (file path :if-does-not-exist nil)
       (when file
-        (read-list file)))))
+        (let ((*package* (find-package '#:minifileman)))
+          (read-list file))))))
 
 (defun write-config (&key (config *config*) (path *default-config-path*))
   (with-open-file (file path
