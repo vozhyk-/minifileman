@@ -140,7 +140,10 @@
            #:*panel*
            #:go-to-dir
 	   #:minifileman-list-dir
-	   #:quit-minifileman))
+	   #:quit-minifileman
+           ;;; sorting functions
+           #:by-directory-p
+           #:by-name))
 
 (defpackage #:minifileman-user
   (:use #:minifileman
