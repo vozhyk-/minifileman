@@ -9,8 +9,8 @@
       (list-directory dir :resolve-symlinks nil)
       (error "Not a directory: ~a" dir))))
 
-(setf (fdefinition 'by-name) #'string<)
-(setf (fdefinition 'by-directory-p) (less-if #'directory-p))
+(setfun by-name #'string<)
+(setfun by-directory-p (less-if #'directory-p))
 
 (defparameter *minifileman-sort-preds*
   (list #'by-directory-p #'by-name))

@@ -131,7 +131,8 @@
 	#:common-lisp)
   (:import-from #:minifileman.utils
     #:multi-level-sort
-    #:less-if)
+    #:less-if
+    #:setfun)
   (:import-from #:kmrcl
     #:string-starts-with)
   (:export #:minifileman
