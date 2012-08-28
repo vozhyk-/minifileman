@@ -14,6 +14,7 @@
     #:parse-ordinary-lambda-list)
   (:export #:last1
            #:less-if
+           #:setfun
            #:ask-read-line
            #:multi-level-sort
            #:_f2
