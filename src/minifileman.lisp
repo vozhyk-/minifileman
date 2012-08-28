@@ -114,9 +114,10 @@
     ;; temporary, will use :bind-contents when it is written
     (mult-bind `(("<Alt-Key-Up>" ,go-up-callback))
                path-entry up-button listbox command-line-frame shell-switch command-entry)
-    (bind listbox "<BackSpace>" go-up-callback)
-    (bind listbox "<Double-Button-1>" enter-dir-callback)
-    (bind listbox "<Return>" enter-dir-callback))
+    (mult-bind `(("<BackSpace>" ,go-up-callback)
+                 ("<Double-Button-1>" ,enter-dir-callback)
+                 ("<Return>" ,enter-dir-callback))
+               listbox))
   (self-autoresize master grid)
   (go-to-dir (or path (last-dir panel) (configq default-dir)) panel))
 
