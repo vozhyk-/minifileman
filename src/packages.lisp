@@ -143,7 +143,12 @@
 	   #:quit-minifileman
            ;;; sorting functions
            #:by-directory-p
-           #:by-name))
+           #:by-name
+           ;;; config variables
+           #:use
+           #:default-dir
+           #:last-dir
+           #:sort-by))
 
 (defpackage #:minifileman-user
   (:use #:minifileman
