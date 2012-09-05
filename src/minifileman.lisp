@@ -55,15 +55,16 @@
 
 (defun file-list-for-display (list)
   (mapcar #'basename
-          (minifileman-sort-file-list
-           #+(and openmcl unix)
-           (mapcar #'(lambda (x)
-                       (remove ccl::*pathname-escape-character* (namestring x))) ; everywhere?
-                   list)
-           #-(and openmcl unix) list)))
+          #+(and openmcl unix)
+          (mapcar #'(lambda (x)
+                      (remove ccl::*pathname-escape-character* (namestring x))) ; everywhere?
+                  list)
+          #-(and openmcl unix) list))
 
-(defmethod (setf file-list) :after (new-list (panel panel))
-  (let ((listbox (files-listbox panel)))
+(defmethod (setf file-list) :around (new-list (panel panel))
+  (let ((new-list (minifileman-sort-file-list new-list))
+        (listbox (files-listbox panel)))
+    (call-next-method new-list panel)
     (listbox-clear listbox)
     (listbox-append listbox (file-list-for-display new-list))))
 
