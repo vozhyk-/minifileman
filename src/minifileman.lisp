@@ -21,28 +21,33 @@
 (defparameter *default-panel-name* 'default)
 
 (define-gui-class panel (frame)
-  ((path-entry 'entry
-               :grid '(0 0 :sticky "we"))
-   (up-button 'button
-              :text "/\\"
-;              :padx 2
-              :width 1.5
-              :background "orange"
-              :grid '(0 1))
-   (files-listbox 'scrolled-listbox
-                  :grid '(1 0 :sticky "wens"))
-   (command-line-frame 'frame
-                       :grid '(3 0 :columnspan 2 :sticky "we")
-                       :column-configure '((1 :weight 1))
-     ((shell-switch 'check-button
-                    :onvalue "yes"
-                    :offvalue "no"
-                    :grid '(0 0))
-      (command-entry 'entry ;history-entry
-                     :grid '(0 1 :sticky "we")))))
+  ((main-frame 'frame
+               :grid '(0 1 :sticky "wens")
+               :column-configure '((0 :weight 1))
+               :row-configure '((1 :weight 1))
+     ((path-entry 'entry
+                  :grid '(0 0 :sticky "we"))
+      (up-button 'button
+                 :text "/\\"
+;                :padx 2
+                 :width 1.5
+                 :background "orange"
+                 :grid '(0 1))
+      (files-listbox 'scrolled-listbox
+                     :grid '(1 0 :sticky "wens"))
+      (command-line-frame 'frame
+                          :grid '(3 0 :columnspan 2 :sticky "we")
+                          :column-configure '((1 :weight 1))
+        ((shell-switch 'check-button
+                       :onvalue "yes"
+                       :offvalue "no"
+                       :grid '(0 0))
+         (command-entry 'entry ;history-entry
+                        :grid '(0 1 :sticky "we"))))))
+   (fav-listbox 'listbox))
   (:default-initargs
-   :column-configure '((0 :weight 1))
-   :row-configure '((1 :weight 1)))
+   :column-configure '((0 :weight 1) (1 :weight 1) (2 :weight 1))
+   :row-configure '((0 :weight 1)))
   (:simple-slots
    (current-dir :initform "" :accessor current-dir)
    (current-file-list :initform nil :accessor file-list)
@@ -92,9 +97,39 @@
 (defun save-last-dir (panel)
   (setf (last-dir panel) (current-dir panel)))
 
-(defmethod initialize-instance :after ((panel panel) &key path (master *tk*) grid &allow-other-keys)
+(defconstant* +sep+ (cons "--------" (constantly nil)))
+
+(defmacro fav (args &body body)
+  `(lambda (&key ,@args &allow-other-keys)
+     ,@body))
+
+(defun go-to-fav (path)
+  (fav (panel)
+    (go-to-dir path panel)))
+
+(defun mkfav (fav)
+  (if (not (listp fav))
+    (symbol-value fav)
+    (cons (first fav) (eval (second fav)))))
+
+(defun update-favs (panel)
+  (bind:bind (((:accessors (listbox fav-listbox)) panel)
+              (favs (mapcar #'mkfav (configq favorites))))
+    (listbox-clear listbox)
+    (listbox-append listbox (mapcar #'first favs))
+    (bind listbox "<Double-Button-1>"
+          (callback (event)
+            (let-when (sel (listbox-get-selection listbox))
+              (run-fav (nth (first sel) favs)
+                       panel))))))
+
+(defun run-fav (fav panel)
+  (funcall (cdr fav) :panel panel))
+
+(defmethod initialize-instance :after ((panel panel) &key path (side :left) (master *tk*) grid &allow-other-keys)
   (bind:bind (((:accessors path-entry up-button files-listbox
-                           command-line-frame shell-switch command-entry) ; all
+                           command-line-frame shell-switch command-entry
+                           fav-listbox) ; all
                panel)
               ((:accessors (entered-path text)) path-entry)
               ((:accessors listbox) files-listbox)
@@ -110,6 +145,10 @@
                (callback (event)
                  (go-to-dir (first (files-listbox-selection panel))
                             panel))))
+    (grid fav-listbox 0 (case side
+                          (:left 0)
+                          (:right 2))
+          :sticky "wens")
     (bind path-entry "<Return>" path-entry-enter-callback)
     (setf (command up-button) go-up-callback)
     ;; temporary, will use :bind-contents when it is written
@@ -120,6 +159,7 @@
                  ("<Return>" ,enter-dir-callback))
                listbox))
   (self-autoresize master grid)
+  (update-favs panel)
   (go-to-dir (or path (last-dir panel) (configq default-dir)) panel))
 
 (defvar *panel* (list nil nil))
@@ -139,5 +179,5 @@
       (wm-title *tk* "minifileman-0.1.0")
       (bind *tk* "<Destroy>" #'quit-minifileman)
       (bind *tk* "<Control-q>" #'quit-minifileman)
-      (setf (first  *panel*) (make-instance 'panel :name 1 :grid '(0 0 :sticky "wens")))
-      (setf (second *panel*) (make-instance 'panel :name 2 :grid '(0 1 :sticky "wens"))))))
+      (setf (first  *panel*) (make-instance 'panel :side :left  :name 1 :grid '(0 0 :sticky "wens")))
+      (setf (second *panel*) (make-instance 'panel :side :right :name 2 :grid '(0 1 :sticky "wens"))))))

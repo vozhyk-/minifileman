@@ -136,21 +136,29 @@
     #:less-if
     #:setfun)
   (:import-from #:kmrcl
-    #:string-starts-with)
+    #:string-starts-with
+    #:defconstant*
+    #:let-when)
   (:export #:minifileman
            #:panel
            #:*panel*
            #:go-to-dir
+           #:update-favs
 	   #:minifileman-list-dir
 	   #:quit-minifileman
            ;;; sorting functions
            #:by-directory-p
            #:by-name
+           ;;; favorites
+           #:+sep+
+           #:fav
+           #:go-to-fav
            ;;; config variables
            #:use
            #:default-dir
            #:last-dir
-           #:sort-by))
+           #:sort-by
+           #:favorites))
 
 (defpackage #:minifileman-user
   (:use #:minifileman
