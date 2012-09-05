@@ -22,7 +22,7 @@
   (when (and path (not (equal path "")))
     (with-open-file (file path :if-does-not-exist nil)
       (when file
-        (let ((*package* (find-package '#:minifileman)))
+        (with-package #:minifileman
           (read-list file))))))
 
 (defun write-config (&key (config *config*) (path *default-config-path*))
@@ -31,7 +31,8 @@
                         :if-does-not-exist :create
                         :if-exists :supersede)
     (let ((*print-case* *config-print-case*))
-      (format file "~{~s~%~^~%~}" config))))
+      (with-package #:minifileman
+        (format file "~{~s~%~^~%~}" config)))))
 
 (defun config (path &optional (config *config*))
   (iter

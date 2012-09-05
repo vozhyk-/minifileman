@@ -80,6 +80,7 @@
 	#:common-lisp)
   (:import-from #:minifileman.utils
     #:_f2
+    #:with-package
     #:last1)
   (:import-from #:kmrcl
     #:get-alist
