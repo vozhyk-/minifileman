@@ -18,6 +18,7 @@
            #:ask-read-line
            #:multi-level-sort
            #:_f2
+           #:with-package
 	   ;#:alist->hash
 	   ;#:skip-keyword-args
 	   #:remove-keyword-args

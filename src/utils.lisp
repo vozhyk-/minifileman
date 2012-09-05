@@ -104,3 +104,7 @@
     `(_f (lambda (,place-var ,arg1 &rest ,args-var)
            (apply #',op ,arg1 ,place-var ,args-var))
          ,place ,arg ,@args)))
+
+(defmacro with-package (package-designator &body body)
+  `(let ((*package* (find-package ',package-designator)))
+     ,@body))
