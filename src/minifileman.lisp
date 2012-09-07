@@ -66,12 +66,24 @@
                   list)
           #-(and openmcl unix) list))
 
+(defun colorize-files (panel)
+  (let ((config (remove-if-not #'listp (configq file-colors)))
+        (listbox (listbox (files-listbox panel))))
+    (iter
+      (for n :from 0)
+      (for path in (file-list panel))
+      (iter
+        (for (pred . args) :in config)
+        (when (funcall (eval pred) path)
+          (apply #'listbox-configure listbox n args))))))
+
 (defmethod (setf file-list) :around (new-list (panel panel))
   (let ((new-list (minifileman-sort-file-list new-list))
         (listbox (files-listbox panel)))
     (call-next-method new-list panel)
     (listbox-clear listbox)
-    (listbox-append listbox (file-list-for-display new-list))))
+    (listbox-append listbox (file-list-for-display new-list))
+    (colorize-files panel)))
 
 (defun files-listbox-selection (panel)
   (mapcar #'(lambda (index)

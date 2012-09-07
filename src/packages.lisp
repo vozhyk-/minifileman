@@ -158,7 +158,8 @@
            #:default-dir
            #:last-dir
            #:sort-by
-           #:favorites))
+           #:favorites
+           #:file-colors))
 
 (defpackage #:minifileman-user
   (:use #:minifileman
