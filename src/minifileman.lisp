@@ -91,10 +91,14 @@
 	  (listbox-get-selection (files-listbox panel))))
 
 (defun go-to-dir (directory panel)
-  (let ((directory (pretty-directory directory)))
-    (setf (file-list panel) (minifileman-list-dir directory))
-    (setf (current-dir panel) directory)
-    (setf *default-pathname-defaults* directory)))
+  (restart-case
+      (let ((directory (pretty-directory directory)))
+        (setf (file-list panel) (minifileman-list-dir directory))
+        (setf (current-dir panel) directory)
+        (setf *default-pathname-defaults* directory))
+    (go-up () (go-up panel directory))
+    (go-to (dir) :interactive (lambda () (list (choose-directory :title "Go to directory:")))
+      (go-to-dir dir panel))))
 
 (defun go-up (panel &optional from-dir)
   (go-to-dir (dirname (or from-dir (current-dir panel))) panel))
