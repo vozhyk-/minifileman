@@ -96,8 +96,8 @@
     (setf (current-dir panel) directory)
     (setf *default-pathname-defaults* directory)))
 
-(defun go-up (panel)
-  (go-to-dir (dirname (current-dir panel)) panel))
+(defun go-up (panel &optional from-dir)
+  (go-to-dir (dirname (or from-dir (current-dir panel))) panel))
 
 (defun last-dir (panel)
   (config `(panel ,(name panel) last-dir)))
